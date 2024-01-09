@@ -22,7 +22,7 @@ class Level:
 		# get the display surface 
 		self.surface = pygame.display.get_surface()
 		# creating the floor
-		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base.png').convert()
+		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base2.png').convert()
 
 		# sprite group setup
 		self.sprs_visible = VisibleSprites(self.floor_surf)
