@@ -151,7 +151,7 @@ class Level:
 		self.game_paused = not self.game_paused 
 
 	def run(self):
-		self.sprs_visible.update_surface_with_player_movement(self.player)
+		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
 		
 		if self.game_paused:
