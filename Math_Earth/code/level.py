@@ -12,6 +12,8 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
 from pygame.math import Vector2
+from entity import VisibleSprites
+
 
 class Level:
 	def __init__(self):
@@ -158,32 +160,3 @@ class Level:
 			self.sprs_visible.update()
 			self.sprs_visible.enemy_update(self.player)
 			self.player_attack_logic()
-		
-
-class VisibleSprites(pygame.sprite.Group):
-	def __init__(self, floor):
-		# general setup 
-		super().__init__()
-		self.surface = pygame.display.get_surface()
-		#螢幕Size 除2 得到中心坐標
-		self.center = Vector2(self.surface.get_size()) // 2
-		#assign 地圖變數
-		self.floor = floor
-
-	def update_surface_with_player_movement(self,player):
-		# 玩家坐標 - 畫面中央坐標 = 位移量
-		offset = Vector2(player.rect.center) - self.center
-		# 得到地圖的位移量 地圖 top left is always (0,0)
-		floor_offset_pos = Vector2(0,0) - offset
-		# 重畫地圖
-		self.surface.blit(self.floor, floor_offset_pos)
-
-		# for sprite in VisibleSprites group from y=0 to y=max
-		for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
-			offset_pos = sprite.rect.topleft - offset
-			self.surface.blit(sprite.image,offset_pos)
-
-	def enemy_update(self,player):
-		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
-		for enemy in enemy_sprites:
-			enemy.enemy_update(player)
