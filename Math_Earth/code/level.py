@@ -11,17 +11,20 @@ from enemy import Enemy
 from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade
+from pygame.math import Vector2
 
 class Level:
 	def __init__(self):
-
-		# get the display surface 
-		self.display_surface = pygame.display.get_surface()
 		self.game_paused = False
 
+		# get the display surface 
+		self.surface = pygame.display.get_surface()
+		# creating the floor
+		self.floor_surf = pygame.image.load('./graphics/tilemap/ground.png').convert()
+
 		# sprite group setup
-		self.visible_sprites = YSortCameraGroup()
-		self.obstacle_sprites = pygame.sprite.Group()
+		self.sprs_visible = VisibleSprites(self.floor_surf)
+		self.sprs_obstacle = pygame.sprite.Group()
 
 		# attack sprites
 		self.current_attack = None
@@ -58,25 +61,25 @@ class Level:
 						x = col_index * TILESIZE
 						y = row_index * TILESIZE
 						if style == 'boundary':
-							Tile((x,y),[self.obstacle_sprites],'invisible')
+							Tile((x,y),[self.sprs_obstacle],'invisible')
 						if style == 'grass':
 							random_grass_image = choice(graphics['grass'])
 							Tile(
 								(x,y),
-								[self.visible_sprites,self.obstacle_sprites,self.attackable_sprites],
+								[self.sprs_visible,self.sprs_obstacle,self.attackable_sprites],
 								'grass',
 								random_grass_image)
 
 						if style == 'object':
 							surf = graphics['objects'][int(col)]
-							Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'object',surf)
+							Tile((x,y),[self.sprs_visible,self.sprs_obstacle],'object',surf)
 
 						if style == 'entities':
 							if col == '394':
 								self.player = Player(
 									(x,y),
-									[self.visible_sprites],
-									self.obstacle_sprites,
+									[self.sprs_visible],
+									self.sprs_obstacle,
 									self.create_attack,
 									self.destroy_attack,
 									self.create_magic)
@@ -89,22 +92,22 @@ class Level:
 								Enemy(
 									monster_name,
 									(x,y),
-									[self.visible_sprites,self.attackable_sprites],
-									self.obstacle_sprites,
+									[self.sprs_visible,self.attackable_sprites],
+									self.sprs_obstacle,
 									self.damage_player,
 									self.trigger_death_particles,
 									self.add_exp)
 
 	def create_attack(self):
 		
-		self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
+		self.current_attack = Weapon(self.player,[self.sprs_visible,self.attack_sprites])
 
 	def create_magic(self,style,strength,cost):
 		if style == 'heal':
-			self.magic_player.heal(self.player,strength,cost,[self.visible_sprites])
+			self.magic_player.heal(self.player,strength,cost,[self.sprs_visible])
 
 		if style == 'flame':
-			self.magic_player.flame(self.player,cost,[self.visible_sprites,self.attack_sprites])
+			self.magic_player.flame(self.player,cost,[self.sprs_visible,self.attack_sprites])
 
 	def destroy_attack(self):
 		if self.current_attack:
@@ -121,7 +124,7 @@ class Level:
 							pos = target_sprite.rect.center
 							offset = pygame.math.Vector2(0,75)
 							for leaf in range(randint(3,6)):
-								self.animation_player.create_grass_particles(pos - offset,[self.visible_sprites])
+								self.animation_player.create_grass_particles(pos - offset,[self.sprs_visible])
 							target_sprite.kill()
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
@@ -131,11 +134,11 @@ class Level:
 			self.player.health -= amount
 			self.player.vulnerable = False
 			self.player.hurt_time = pygame.time.get_ticks()
-			self.animation_player.create_particles(attack_type,self.player.rect.center,[self.visible_sprites])
+			self.animation_player.create_particles(attack_type,self.player.rect.center,[self.sprs_visible])
 
 	def trigger_death_particles(self,pos,particle_type):
 
-		self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
+		self.animation_player.create_particles(particle_type,pos,self.sprs_visible)
 
 	def add_exp(self,amount):
 
@@ -146,45 +149,39 @@ class Level:
 		self.game_paused = not self.game_paused 
 
 	def run(self):
-		self.visible_sprites.custom_draw(self.player)
+		self.sprs_visible.update_surface_with_player_movement(self.player)
 		self.ui.display(self.player)
 		
 		if self.game_paused:
 			self.upgrade.display()
 		else:
-			self.visible_sprites.update()
-			self.visible_sprites.enemy_update(self.player)
+			self.sprs_visible.update()
+			self.sprs_visible.enemy_update(self.player)
 			self.player_attack_logic()
 		
 
-class YSortCameraGroup(pygame.sprite.Group):
-	def __init__(self):
-
+class VisibleSprites(pygame.sprite.Group):
+	def __init__(self, floor):
 		# general setup 
 		super().__init__()
-		self.display_surface = pygame.display.get_surface()
-		self.half_width = self.display_surface.get_size()[0] // 2
-		self.half_height = self.display_surface.get_size()[1] // 2
-		self.offset = pygame.math.Vector2()
+		self.surface = pygame.display.get_surface()
+		#螢幕Size 除2 得到中心坐標
+		self.center = Vector2(self.surface.get_size()) // 2
+		#assign 地圖變數
+		self.floor = floor
 
-		# creating the floor
-		self.floor_surf = pygame.image.load('./graphics/tilemap/ground.png').convert()
-		self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
+	def update_surface_with_player_movement(self,player):
+		# 玩家坐標 - 畫面中央坐標 = 位移量
+		offset = Vector2(player.rect.center) - self.center
+		# 得到地圖的位移量 地圖 top left is always (0,0)
+		floor_offset_pos = Vector2(0,0) - offset
+		# 重畫地圖
+		self.surface.blit(self.floor, floor_offset_pos)
 
-	def custom_draw(self,player):
-
-		# getting the offset 
-		self.offset.x = player.rect.centerx - self.half_width
-		self.offset.y = player.rect.centery - self.half_height
-
-		# drawing the floor
-		floor_offset_pos = self.floor_rect.topleft - self.offset
-		self.display_surface.blit(self.floor_surf,floor_offset_pos)
-
-		# for sprite in self.sprites():
+		# for sprite in VisibleSprites group from y=0 to y=max
 		for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
-			offset_pos = sprite.rect.topleft - self.offset
-			self.display_surface.blit(sprite.image,offset_pos)
+			offset_pos = sprite.rect.topleft - offset
+			self.surface.blit(sprite.image,offset_pos)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']

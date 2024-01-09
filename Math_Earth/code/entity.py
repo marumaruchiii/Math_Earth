@@ -1,12 +1,13 @@
 import pygame
 from math import sin
+from pygame.math import Vector2
 
 class Entity(pygame.sprite.Sprite):
 	def __init__(self,groups):
 		super().__init__(groups)
 		self.frame_index = 0
 		self.animation_speed = 0.15
-		self.direction = pygame.math.Vector2()
+		self.direction = Vector2()
 
 	def move(self,speed):
 		if self.direction.magnitude() != 0:
