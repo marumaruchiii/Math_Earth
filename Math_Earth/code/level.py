@@ -22,7 +22,7 @@ class Level:
 		# get the display surface 
 		self.surface = pygame.display.get_surface()
 		# creating the floor
-		self.floor_surf = pygame.image.load('./graphics/tilemap/ground.png').convert()
+		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base.png').convert()
 
 		# sprite group setup
 		self.sprs_visible = VisibleSprites(self.floor_surf)
@@ -46,10 +46,10 @@ class Level:
 
 	def create_map(self):
 		layouts = {
-			'boundary': import_csv_layout('./map/map_FloorBlocks.csv'),
-			'grass': import_csv_layout('./map/map_Grass.csv'),
-			'object': import_csv_layout('./map/map_Objects.csv'),
-			'entities': import_csv_layout('./map/map_Entities.csv')
+			'boundary': import_csv_layout('./map/fju_map_FloorBlocks.csv'),
+			'grass': import_csv_layout('./map/fju_map_Grass.csv'),
+			'object': import_csv_layout('./map/fju_map_Objects.csv'),
+			'entities': import_csv_layout('./map/fju_map_Entities.csv')
 		}
 		graphics = {
 			'grass': import_folder('./graphics/Grass'),
