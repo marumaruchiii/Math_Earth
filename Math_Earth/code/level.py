@@ -10,14 +10,14 @@ from ui import UI
 from enemy import Enemy
 from particles import AnimationPlayer
 from magic import MagicPlayer
-from upgrade import Upgrade
-from pygame.math import Vector2
+from upgrade import Upgrade, GameOption
 from entity import VisibleSprites
 
 
 class Level:
 	def __init__(self):
 		self.game_paused = False
+		self.is_game_option = False
 
 		# get the display surface 
 		self.surface = pygame.display.get_surface()
@@ -39,6 +39,7 @@ class Level:
 		# user interface 
 		self.ui = UI()
 		self.upgrade = Upgrade(self.player)
+		self.game_option = GameOption()
 
 		# particles
 		self.animation_player = AnimationPlayer()
@@ -146,16 +147,23 @@ class Level:
 
 		self.player.exp += amount
 
-	def toggle_menu(self):
-
+	def toggle_skill_menu(self):
+		self.is_game_option = False
 		self.game_paused = not self.game_paused 
 
-	def run(self):
+	def toggle_game_menu(self):
+		self.is_game_option = True
+		self.game_paused = not self.game_paused
+
+def run(self):
 		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
 		
 		if self.game_paused:
-			self.upgrade.display()
+			if self.is_game_option:
+				self.game_option.display()
+			else:
+				self.upgrade.display()
 		else:
 			self.sprs_visible.update()
 			self.sprs_visible.enemy_update(self.player)

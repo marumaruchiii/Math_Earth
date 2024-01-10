@@ -38,7 +38,7 @@ class Upgrade:
 			if keys[pygame.K_SPACE]:
 				self.can_move = False
 				self.selection_time = pygame.time.get_ticks()
-				self.item_list[self.selection_index].trigger(self.player)
+				self.item_list[self.selection_index].player_status_setting(self.player)
 
 	def selection_cooldown(self):
 		if not self.can_move:
@@ -59,7 +59,7 @@ class Upgrade:
 			top = self.display_surface.get_size()[1] * 0.1
 
 			# create the object 
-			item = Item(left,top,self.width,self.height,index,self.font)
+			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
 			self.item_list.append(item)
 
 	def display(self):
@@ -75,7 +75,100 @@ class Upgrade:
 			cost = self.player.get_cost_by_index(index)
 			item.display(self.display_surface,self.selection_index,name,value,max_value,cost)
 
-class Item:
+# 遊戲Menu
+class GameOption:
+	def __init__(self):
+		self.option = { 'music':50, 'audio_effect':50 }
+		self.option_max = { 'music':100, 'audio_effect':100 }
+
+		# sound 
+		self.main_sound = pygame.mixer.Sound('./audio/main.ogg')
+		self.main_sound.set_volume( self.option['music'] / self.option_max['music'] )
+		self.main_sound.play(loops = -1)
+
+		# general setup
+		self.display_surface = pygame.display.get_surface()
+		self.attribute_nr = len(self.option)
+		self.attribute_names = list(self.option.keys())
+		self.max_values = list(self.option_max.values())
+		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+
+		# menu bar 的小方塊
+		self.height = self.display_surface.get_size()[1] * 0.8
+		self.width = self.display_surface.get_size()[0] // 6
+		self.create_items()
+
+		# selection system 
+		self.selection_index = 0
+		self.selection_time = None
+		self.can_move = True
+
+	def create_items(self):
+		self.item_list = []
+
+		for item, index in enumerate(range(self.attribute_nr)):
+			# horizontal position
+			full_width = self.display_surface.get_size()[0]
+			increment = full_width // self.attribute_nr
+			left = (item * increment) + (increment - self.width) // 2
+			
+			# vertical position 
+			top = self.display_surface.get_size()[1] * 0.1
+
+			# create the object 
+			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
+			self.item_list.append(item)
+
+	def game_option_setting(self, is_up):
+		opt_key = list(self.option.keys())[self.selection_index]
+		if is_up:
+			self.option[opt_key] += 10
+		else:
+			self.option[opt_key] -= 10
+		self.option[opt_key] = max(self.option[opt_key], 0)
+		self.option[opt_key] = min(self.option[opt_key], self.option_max[opt_key])
+		self.main_sound.set_volume( self.option['music'] / self.option_max['music'] )
+
+	def input(self):
+		keys = pygame.key.get_pressed()
+
+		if self.can_move:
+			if keys[pygame.K_RIGHT] and self.selection_index < self.attribute_nr - 1:
+				self.can_move = False
+				self.selection_index += 1
+				self.selection_time = pygame.time.get_ticks()
+			elif keys[pygame.K_LEFT] and self.selection_index >= 1:
+				self.can_move = False
+				self.selection_index -= 1
+				self.selection_time = pygame.time.get_ticks()
+
+			if keys[pygame.K_UP]:
+				self.selection_time = pygame.time.get_ticks()
+				self.can_move = False
+				self.game_option_setting(True)
+			if keys[pygame.K_DOWN]:
+				self.selection_time = pygame.time.get_ticks()
+				self.can_move = False
+				self.game_option_setting(False)
+
+	def selection_cooldown(self):
+		if not self.can_move:
+			current_time = pygame.time.get_ticks()
+			if current_time - self.selection_time >= 300:
+				self.can_move = True
+
+	def display(self):
+		self.input()
+		self.selection_cooldown()
+
+		for index, item in enumerate(self.item_list):
+			# get attributes
+			name = self.attribute_names[index]
+			value = self.option[(list(self.option.keys())[index])]
+			max_value = self.max_values[index]
+			item.display(self.display_surface,self.selection_index,name,value,max_value,0)
+
+class SettingScrollBar:
 	def __init__(self,l,t,w,h,index,font):
 		self.rect = pygame.Rect(l,t,w,h)
 		self.index = index
@@ -112,7 +205,7 @@ class Item:
 		pygame.draw.line(surface,color,top,bottom,5)
 		pygame.draw.rect(surface,color,value_rect)
 
-	def trigger(self,player):
+	def player_status_setting(self,player):
 		upgrade_attribute = list(player.stats.keys())[self.index]
 
 		if player.exp >= player.upgrade_cost[upgrade_attribute] and player.stats[upgrade_attribute] < player.max_stats[upgrade_attribute]:
