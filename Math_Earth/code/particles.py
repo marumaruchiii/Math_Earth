@@ -9,6 +9,7 @@ class AnimationPlayer:
 			'flame': import_folder('./graphics/particles/flame/frames'),
 			'aura': import_folder('./graphics/particles/aura'),
 			'heal': import_folder('./graphics/particles/heal/frames'),
+			'Ice1': import_folder('./graphics/particles/Ice1'),
 			
 			# attacks 
 			'claw': import_folder('./graphics/particles/claw'),
@@ -16,12 +17,16 @@ class AnimationPlayer:
 			'sparkle': import_folder('./graphics/particles/sparkle'),
 			'leaf_attack': import_folder('./graphics/particles/leaf_attack'),
 			'thunder': import_folder('./graphics/particles/thunder'),
+			'leaf_drill':import_folder('./graphics/particles/leaf_drill'),
 
 			# monster deaths
 			'squid': import_folder('./graphics/particles/smoke_orange'),
 			'raccoon': import_folder('./graphics/particles/raccoon'),
+			'boxx': import_folder('./graphics/particles/boxx'), #boxx
 			'spirit': import_folder('./graphics/particles/nova'),
 			'bamboo': import_folder('./graphics/particles/bamboo'),
+			'bamboo yellow': import_folder('./graphics/particles/bamboo yellow'),
+			'Cyclope2': import_folder('./graphics/particles/Cyclope2'),
 			
 			# leafs 
 			'leaf': (
