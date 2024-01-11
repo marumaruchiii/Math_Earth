@@ -51,6 +51,8 @@ class VisibleSprites(pygame.sprite.Group):
 		self.center = Vector2(self.layer.get_size()) // 2
 		self.floor = floor
 
+		self.valid_x, self.valid_y = range(WIDTH), range(HEIGTH)
+
 	def update_player_movement(self,player):
 		""" 隨著玩家移動Update畫面 """
 		# 畫面中間坐標 - 玩家坐標 = 取得玩家移動量 -> 令它保持在畫面中間
@@ -59,10 +61,12 @@ class VisibleSprites(pygame.sprite.Group):
 		# 重畫地圖
 		self.layer.blit(self.floor, offset)
 		# 重畫obj
-		update_sprs = self.sprites() # sorted(self.sprites(),key = lambda sprite: sprite.rect.centery)
+		update_sprs = self.sprites()
 		for spr in update_sprs:
 			spr_pos = spr.rect.topleft + offset
-			self.layer.blit(spr.image,spr_pos)
+			spr_end = spr_pos + spr.rect.size
+			if (spr_end.x in self.valid_x and spr_end.y in self.valid_y) or (spr_pos.x in self.valid_x and spr_pos.y in self.valid_y):
+				self.layer.blit(spr.image,spr_pos)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
