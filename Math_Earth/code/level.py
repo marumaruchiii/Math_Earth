@@ -1,7 +1,7 @@
 import pygame 
 from settings import *
 from tile import Tile
-from player import Player
+from player import Player, NPC
 from debug import debug
 from support import *
 from random import choice, randint
@@ -13,14 +13,13 @@ from magic import MagicPlayer
 from upgrade import Upgrade, GameOption
 from entity import VisibleSprites
 
-
 class Level:
 	def __init__(self):
 		self.game_paused = False
 		self.is_game_option = False
 
 		# get the display surface 
-		self.surface = pygame.display.get_surface()
+		# self.surface = pygame.display.get_surface()
 		# creating the floor
 		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base2.png').convert()
 
@@ -86,11 +85,17 @@ class Level:
 									self.create_attack,
 									self.destroy_attack,
 									self.create_magic)
+							elif col == '389':
+								self.player = NPC(
+									(x,y),
+									[self.sprs_visible,self.sprs_obstacle],
+									self.sprs_obstacle,
+									'paul', floor_surf=self.floor_surf)
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit' #spirit
-								elif col == '393': monster_name = 'boxx' #boxx 393
 								elif col == '392': monster_name ='raccoon'
+								elif col == '393': monster_name = 'boxx' #boxx 393
 								elif col == '395': monster_name ='Cyclope2'
 								else: monster_name = 'squid'
 								Enemy(
@@ -156,16 +161,16 @@ class Level:
 		self.is_game_option = True
 		self.game_paused = not self.game_paused
 
-def run(self):
-		self.sprs_visible.update_player_movement(self.player)
-		self.ui.display(self.player)
-		
-		if self.game_paused:
-			if self.is_game_option:
-				self.game_option.display()
+	def run(self):
+			self.sprs_visible.update_player_movement(self.player)
+			self.ui.display(self.player)
+			
+			if self.game_paused:
+				if self.is_game_option:
+					self.game_option.display()
+				else:
+					self.upgrade.display()
 			else:
-				self.upgrade.display()
-		else:
-			self.sprs_visible.update()
-			self.sprs_visible.enemy_update(self.player)
-			self.player_attack_logic()
+				self.sprs_visible.update()
+				self.sprs_visible.enemy_update(self.player)
+				self.player_attack_logic()
