@@ -82,13 +82,14 @@ class Level:
 									self.sprs_obstacle,
 									self.create_attack,
 									self.destroy_attack,
-									self.create_magic)
+									self.create_magic,
+									self.use_item)
 							elif col == '389':
 								self.player = NPC(
 									(x,y),
 									[self.sprs_visible,self.sprs_obstacle],
 									self.sprs_obstacle,
-									'paul', floor_surf=self.floor_surf)
+									'paul')
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit' #spirit
@@ -115,6 +116,9 @@ class Level:
 
 		if style == 'flame':
 			self.magic_player.flame(self.player,cost,[self.sprs_visible,self.attack_sprites])
+
+	def use_item(self):
+		pass
 
 	def destroy_attack(self):
 		if self.current_attack:

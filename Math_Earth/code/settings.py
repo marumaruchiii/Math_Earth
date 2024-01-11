@@ -19,7 +19,7 @@ UI_FONT_SIZE = 18
 
 # general colors
 WATER_COLOR = '#71ddee'
-UI_BG_COLOR = '#222222'
+UI_BG_COLOR = '#444444'
 UI_BORDER_COLOR = '#111111'
 TEXT_COLOR = '#EEEEEE'
 
@@ -46,6 +46,20 @@ weapon_data = {
 magic_data = {
 	'flame': {'strength': 5,'cost': 4,'graphic':'./graphics/particles/flame/fire.png'},
 	'heal' : {'strength': 20,'cost': 4,'graphic':'./graphics/particles/heal/heal.png'}}
+
+# item
+item_data = {
+	'item_0': {'graphic':'./graphics/particles/flame/fire.png'},
+	'item_1': {'graphic':'./graphics/particles/heal/heal.png'},
+	'item_2': {'graphic':'./graphics/particles/flame/fire.png'},
+	'item_3': {'graphic':'./graphics/particles/heal/heal.png'},
+	'item_4': {'graphic':'./graphics/particles/flame/fire.png'},
+	'item_5': {'graphic':'./graphics/particles/heal/heal.png'},
+	'item_6': {'graphic':'./graphics/particles/flame/fire.png'},
+	'item_7': {'graphic':'./graphics/particles/heal/heal.png'},
+	'item_8': {'graphic':'./graphics/particles/flame/fire.png'},
+	'item_9': {'graphic':'./graphics/particles/heal/heal.png'},
+    }
 
 # enemy
 monster_data = {

@@ -25,6 +25,11 @@ class UI:
 			magic = pygame.image.load(magic['graphic']).convert_alpha()
 			self.magic_graphics.append(magic)
 
+		# convert item dictionary
+		self.item_graphics = []
+		for item in item_data.values():
+			item = pygame.image.load(item['graphic']).convert_alpha()
+			self.item_graphics.append(item)
 
 	def show_bar(self,current,max_amount,bg_rect,color):
 		# draw bg 
@@ -59,19 +64,47 @@ class UI:
 			pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect,3)
 		return bg_rect
 
-	def weapon_overlay(self,weapon_index,has_switched):
+	def weapon_hud(self,weapon_index,has_switched):
 		bg_rect = self.selection_box(10,630,has_switched)
 		weapon_surf = self.weapon_graphics[weapon_index]
 		weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
 
 		self.layer.blit(weapon_surf,weapon_rect)
 
-	def magic_overlay(self,magic_index,has_switched):
-		bg_rect = self.selection_box(80,635,has_switched)
+	def magic_hud(self,magic_index,has_switched):
+		bg_rect = self.selection_box(90,630,has_switched)
 		magic_surf = self.magic_graphics[magic_index]
 		magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
 		self.layer.blit(magic_surf,magic_rect)
+
+	#Item 0-9 各自存
+	def item_hud(self,item_index,has_switched):
+		if item_index == 0:
+			bg_rect = self.selection_box(222,630,has_switched)
+		if item_index == 1:
+			bg_rect = self.selection_box(306,630,has_switched)
+		if item_index == 2:
+			bg_rect = self.selection_box(390,630,has_switched)
+		if item_index == 3:
+			bg_rect = self.selection_box(474,630,has_switched)
+		if item_index == 4:
+			bg_rect = self.selection_box(558,630,has_switched)
+		if item_index == 5:
+			bg_rect = self.selection_box(642,630,has_switched)
+		if item_index == 6:
+			bg_rect = self.selection_box(726,630,has_switched)
+		if item_index == 7:
+			bg_rect = self.selection_box(810,630,has_switched)
+		if item_index == 8:
+			bg_rect = self.selection_box(894,630,has_switched)
+		if item_index == 9:
+			bg_rect = self.selection_box(978,630,has_switched)
+			
+		item_surf = self.item_graphics[item_index]
+		item_rect = item_surf.get_rect(center = bg_rect.center)
+
+		self.layer.blit(item_surf,item_rect)
 
 	def display(self,player):
 		self.show_bar(player.health,player.stats['health'],self.health_bar_rect,HEALTH_COLOR)
@@ -79,5 +112,7 @@ class UI:
 
 		self.show_exp(player.exp)
 
-		self.weapon_overlay(player.weapon_index,not player.can_switch_weapon)
-		self.magic_overlay(player.magic_index,not player.can_switch_magic)
+		self.weapon_hud(player.weapon_index,not player.can_switch_weapon)
+		self.magic_hud(player.magic_index,not player.can_switch_magic)
+		for i in range(10):
+			self.item_hud(i,not player.can_switch_item)

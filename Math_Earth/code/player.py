@@ -4,7 +4,7 @@ from support import import_folder
 from entity import Entity
 
 class Player(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic):
+	def __init__(self,pos,groups,obstacle_sprites,create_attack,destroy_attack,create_magic,use_item):
 		super().__init__(groups)
 		self.image = pygame.image.load('./graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
@@ -35,6 +35,13 @@ class Player(Entity):
 		self.magic = list(magic_data.keys())[self.magic_index]
 		self.can_switch_magic = True
 		self.magic_switch_time = None
+
+		# item 
+		self.use_item = use_item
+		self.item_index = 0
+		self.item = list(item_data.keys())[self.item_index]
+		self.can_switch_item = True
+		self.item_switch_time = None
 
 		# stats
 		self.stats = {'health': 100,'energy':60,'attack': 10,'magic': 4,'speed': 5}
@@ -217,7 +224,7 @@ class Player(Entity):
 		self.move(self.stats['speed'])
 		self.energy_recovery()
 class NPC(Entity):
-	def __init__(self,pos,groups,obstacle_sprites,npc_name, floor_surf=None):
+	def __init__(self,pos,groups,obstacle_sprites,npc_name):
 		super().__init__(groups)
 		self.image = pygame.image.load(f'./graphics/test/{npc_name}.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
