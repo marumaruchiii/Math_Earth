@@ -226,6 +226,7 @@ class Player(Entity):
 class NPC(Entity):
 	def __init__(self,pos,groups,obstacle_sprites,npc_name):
 		super().__init__(groups)
+		self.npc_name = npc_name
 		self.image = pygame.image.load(f'./graphics/test/{npc_name}.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])

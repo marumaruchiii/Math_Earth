@@ -1,5 +1,6 @@
 import pygame 
 from settings import *
+from pygame.math import Vector2
 from tile import Tile
 from player import Player, NPC
 from debug import debug
@@ -31,6 +32,8 @@ class Level:
 		self.attackable_sprites = pygame.sprite.Group()
 
 		# sprite setup
+		self.active_npc = None
+		self.npcs = []
 		self.create_map()
 
 		# user interface 
@@ -85,11 +88,11 @@ class Level:
 									self.create_magic,
 									self.use_item)
 							elif col == '389':
-								self.player = NPC(
+								self.npcs.append( NPC(
 									(x,y),
 									[self.sprs_visible,self.sprs_obstacle],
 									self.sprs_obstacle,
-									'paul')
+									'paul'))
 							else:
 								if col == '390': monster_name = 'bamboo'
 								elif col == '391': monster_name = 'spirit' #spirit
@@ -120,6 +123,17 @@ class Level:
 	def use_item(self):
 		pass
 
+	def check_available_npc(self):
+		cent_player = Vector2(self.player.rect.center)
+		for npc in self.npcs:
+			cent_npc = Vector2(npc.rect.center)
+			distance_to_npc = cent_player.distance_to(cent_npc)
+			if distance_to_npc <= TILESIZE:
+				self.active_npc = npc
+				return True
+		self.active_npc = None
+		return False
+	
 	def destroy_attack(self):
 		if self.current_attack:
 			self.current_attack.kill()
@@ -163,6 +177,11 @@ class Level:
 		self.is_game_option = True
 		self.game_paused = not self.game_paused
 
+	def toggle_dialogue(self):
+		if not self.check_available_npc():	return
+		self.is_dialogue = True
+		self.game_paused = not self.game_paused
+
 	def run(self):
 			self.sprs_visible.update_player_movement(self.player)
 			self.ui.display(self.player)
@@ -172,6 +191,8 @@ class Level:
 					self.game_option.display()
 				else:
 					self.upgrade.display()
+				if self.is_dialogue:
+					self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}.", self.active_npc.image)
 			else:
 				self.sprs_visible.update()
 				self.sprs_visible.enemy_update(self.player)

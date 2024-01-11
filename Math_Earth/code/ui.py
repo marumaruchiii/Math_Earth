@@ -55,6 +55,23 @@ class UI:
 		self.layer.blit(text_surf,text_rect)
 		pygame.draw.rect(self.layer,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 
+	def show_dialogue(self, text, npc_icon):
+		x = 0
+		y = self.layer.get_size()[1] - 180
+		w = self.layer.get_size()[0]
+		h = 180
+		thick = 5
+		bg_rect = pygame.Rect(x,y,w,h)
+		pygame.draw.rect(self.layer,UI_BG_COLOR,bg_rect)
+		pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect.inflate(thick,thick),thick)
+
+		icon_rect = npc_icon.get_rect(topleft=(x+20,y+20))
+		self.layer.blit(npc_icon,icon_rect)
+
+		text_surf = self.font.render(text,False,TEXT_COLOR)
+		text_rect = text_surf.get_rect(topleft=(x+100,y+20))
+		self.layer.blit(text_surf,text_rect)
+
 	def selection_box(self,left,top, has_switched):
 		bg_rect = pygame.Rect(left,top,ITEM_BOX_SIZE,ITEM_BOX_SIZE)
 		pygame.draw.rect(self.layer,UI_BG_COLOR,bg_rect)

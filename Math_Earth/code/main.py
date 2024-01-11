@@ -25,6 +25,8 @@ class Game:
 						self.level.toggle_game_menu()
 					if event.key == pygame.K_m:
 						self.level.toggle_skill_menu()
+					if event.key == pygame.K_f:
+						self.level.toggle_dialogue()
 
 			self.screen.fill(WATER_COLOR)
 			self.level.run()
