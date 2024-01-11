@@ -1,5 +1,7 @@
 import pygame
+from sys import exit
 from pygame.font import Font
+from moviepy.editor import VideoFileClip
 from settings import * 
 
 class UI:
@@ -134,3 +136,35 @@ class UI:
 		self.magic_hud(player.magic_index,not player.can_switch_magic)
 		for i in range(10):
 			self.item_hud(i,not player.can_switch_item)
+class GameStartMenu:
+	def __init__(self, window, clock) -> None:
+		self.window = window
+		self.clock = clock
+		self.clip = VideoFileClip('./video/opening.mp4')
+
+		# ui general 
+		self.layer = pygame.display.get_surface()
+		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
+
+		# POSTER底圖
+		self.background_art = pygame.image.load('./graphics/game_start/POSTER.png').convert()
+
+	def play_opening_video(self):
+		self.clip.preview()
+
+	def enter_start_menu(self):
+		run = True
+		while run:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_p:
+						run = False
+
+			self.window.fill(WATER_COLOR)
+			self.layer.blit(self.background_art, (0,0))
+			pygame.display.update()
+			self.clock.tick(FPS)
+		pass

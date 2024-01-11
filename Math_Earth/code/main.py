@@ -1,5 +1,6 @@
 import pygame, sys
 from settings import *
+from ui import GameStartMenu
 from level import Level
 from debug import debug
 
@@ -12,6 +13,7 @@ class Game:
 		pygame.display.set_caption('數學救地球')
 		self.clock = pygame.time.Clock()
 
+		self.start_menu = GameStartMenu(self.screen, self.clock)
 		self.level = Level()
 
 	def run(self):
@@ -35,4 +37,6 @@ class Game:
 
 if __name__ == '__main__':
 	game = Game()
+	game.start_menu.play_opening_video()
+	game.start_menu.enter_start_menu()
 	game.run()
