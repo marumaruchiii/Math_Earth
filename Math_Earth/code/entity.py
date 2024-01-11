@@ -51,8 +51,6 @@ class VisibleSprites(pygame.sprite.Group):
 		self.center = Vector2(self.layer.get_size()) // 2
 		self.floor = floor
 
-		self.valid_x, self.valid_y = range(WIDTH), range(HEIGTH)
-
 	def update_player_movement(self,player):
 		""" 隨著玩家移動Update畫面 """
 		# 畫面中間坐標 - 玩家坐標 = 取得玩家移動量 -> 令它保持在畫面中間
