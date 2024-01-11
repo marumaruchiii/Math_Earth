@@ -62,9 +62,7 @@ class VisibleSprites(pygame.sprite.Group):
 		update_sprs = self.sprites()
 		for spr in update_sprs:
 			spr_pos = spr.rect.topleft + offset
-			spr_end = spr_pos + spr.rect.size
-			if (spr_end.x in self.valid_x and spr_end.y in self.valid_y) or (spr_pos.x in self.valid_x and spr_pos.y in self.valid_y):
-				self.layer.blit(spr.image,spr_pos)
+			self.layer.blit(spr.image,spr_pos)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
