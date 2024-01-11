@@ -163,7 +163,6 @@ class GameStartMenu:
 					if event.key == pygame.K_p:
 						run = False
 
-			self.window.fill(WATER_COLOR)
 			self.layer.blit(self.background_art, (0,0))
 			pygame.display.update()
 			self.clock.tick(FPS)

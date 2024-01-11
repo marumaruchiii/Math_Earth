@@ -11,8 +11,8 @@ class Game:
 		pygame.init()
 		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
 		pygame.display.set_caption('數學救地球')
+		self.screen.fill(WATER_COLOR)
 		self.clock = pygame.time.Clock()
-
 		self.start_menu = GameStartMenu(self.screen, self.clock)
 		self.level = Level()
 
@@ -30,7 +30,6 @@ class Game:
 					if event.key == pygame.K_f:
 						self.level.toggle_dialog()
 
-			self.screen.fill(WATER_COLOR)
 			self.level.run()
 			pygame.display.update()
 			self.clock.tick(FPS)
