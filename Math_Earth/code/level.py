@@ -17,8 +17,8 @@ from entity import VisibleSprites
 class Level:
 	def __init__(self):
 		self.game_paused = False
-		self.is_game_option = False
-
+		self.pause_trigger = None
+		
 		# creating the floor
 		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base2.png').convert()
 
@@ -170,30 +170,31 @@ class Level:
 		self.player.exp += amount
 
 	def toggle_skill_menu(self):
-		self.is_game_option = False
+		self.pause_trigger = 'skill_menu'
 		self.game_paused = not self.game_paused 
 
 	def toggle_game_menu(self):
-		self.is_game_option = True
-		self.game_paused = not self.game_paused
+		self.pause_trigger = 'game_menu'
+		self.game_paused = not self.game_paused 
 
 	def toggle_dialogue(self):
 		if not self.check_available_npc():	return
-		self.is_dialogue = True
+		self.pause_trigger = 'dialogue'
 		self.game_paused = not self.game_paused
 
+		
+		
 	def run(self):
-			self.sprs_visible.update_player_movement(self.player)
-			self.ui.display(self.player)
-			
-			if self.game_paused:
-				if self.is_game_option:
-					self.game_option.display()
-				else:
-					self.upgrade.display()
-				if self.is_dialogue:
-					self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}.", self.active_npc.image)
-			else:
-				self.sprs_visible.update()
-				self.sprs_visible.enemy_update(self.player)
-				self.player_attack_logic()
+		self.sprs_visible.update_player_movement(self.player)
+		self.ui.display(self.player)
+
+		#檢查Event 因應不同的出不同menu
+		if self.game_paused:
+			if self.pause_trigger == 'skill_menu':	self.upgrade.display()
+			elif self.pause_trigger == 'game_menu':	self.game_option.display()
+			elif self.pause_trigger == 'dialogue':	self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
+			else:									return
+		else:
+			self.sprs_visible.update()
+			self.sprs_visible.enemy_update(self.player)
+			self.player_attack_logic()
