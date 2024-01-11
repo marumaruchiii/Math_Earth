@@ -151,6 +151,7 @@ class GameStartMenu:
 
 	def play_opening_video(self):
 		self.clip.preview()
+		self.clip.close()
 
 	def enter_start_menu(self):
 		run = True
