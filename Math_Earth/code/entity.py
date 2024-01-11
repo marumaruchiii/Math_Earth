@@ -47,8 +47,8 @@ class VisibleSprites(pygame.sprite.Group):
 	def __init__(self, floor):
 		# general setup 
 		super().__init__()
-		self.surface = pygame.display.get_surface()
-		self.center = Vector2(self.surface.get_size()) // 2
+		self.layer = pygame.display.get_surface()
+		self.center = Vector2(self.layer.get_size()) // 2
 		self.floor = floor
 
 	def update_player_movement(self,player):
@@ -57,12 +57,12 @@ class VisibleSprites(pygame.sprite.Group):
 		offset = self.center - Vector2(player.rect.center)
 
 		# 重畫地圖
-		self.surface.blit(self.floor, offset)
+		self.layer.blit(self.floor, offset)
 		# 重畫obj
 		update_sprs = self.sprites() # sorted(self.sprites(),key = lambda sprite: sprite.rect.centery)
 		for spr in update_sprs:
 			spr_pos = spr.rect.topleft + offset
-			self.surface.blit(spr.image,spr_pos)
+			self.layer.blit(spr.image,spr_pos)
 
 	def enemy_update(self,player):
 		enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']

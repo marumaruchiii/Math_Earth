@@ -18,8 +18,6 @@ class Level:
 		self.game_paused = False
 		self.is_game_option = False
 
-		# get the display surface 
-		# self.surface = pygame.display.get_surface()
 		# creating the floor
 		self.floor_surf = pygame.image.load('./graphics/tilemap/map_base2.png').convert()
 

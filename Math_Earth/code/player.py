@@ -125,6 +125,10 @@ class Player(Entity):
 
 				self.magic = list(magic_data.keys())[self.magic_index]
 
+			# NPC dialogue
+			if keys[pygame.K_f]:
+				pass
+
 	def get_status(self):
 
 		# idle status
@@ -221,6 +225,9 @@ class NPC(Entity):
 		self.obstacle_sprites = obstacle_sprites
 
 	def idle(self):
+		pass
+
+	def dialogue(self):
 		pass
 
 	def update(self):

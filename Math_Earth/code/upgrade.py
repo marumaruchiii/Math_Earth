@@ -5,7 +5,7 @@ class Upgrade:
 	def __init__(self,player):
 
 		# general setup
-		self.display_surface = pygame.display.get_surface()
+		self.layer = pygame.display.get_surface()
 		self.player = player
 		self.attribute_nr = len(player.stats)
 		self.attribute_names = list(player.stats.keys())
@@ -13,8 +13,8 @@ class Upgrade:
 		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
 		# item creation
-		self.height = self.display_surface.get_size()[1] * 0.8
-		self.width = self.display_surface.get_size()[0] // 6
+		self.height = self.layer.get_size()[1] * 0.8
+		self.width = self.layer.get_size()[0] // 6
 		self.create_items()
 
 		# selection system 
@@ -51,12 +51,12 @@ class Upgrade:
 
 		for item, index in enumerate(range(self.attribute_nr)):
 			# horizontal position
-			full_width = self.display_surface.get_size()[0]
+			full_width = self.layer.get_size()[0]
 			increment = full_width // self.attribute_nr
 			left = (item * increment) + (increment - self.width) // 2
 			
 			# vertical position 
-			top = self.display_surface.get_size()[1] * 0.1
+			top = self.layer.get_size()[1] * 0.1
 
 			# create the object 
 			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
@@ -73,7 +73,7 @@ class Upgrade:
 			value = self.player.get_value_by_index(index)
 			max_value = self.max_values[index]
 			cost = self.player.get_cost_by_index(index)
-			item.display(self.display_surface,self.selection_index,name,value,max_value,cost)
+			item.display(self.layer,self.selection_index,name,value,max_value,cost)
 
 # 遊戲Menu
 class GameOption:
@@ -87,15 +87,15 @@ class GameOption:
 		self.main_sound.play(loops = -1)
 
 		# general setup
-		self.display_surface = pygame.display.get_surface()
+		self.layer = pygame.display.get_surface()
 		self.attribute_nr = len(self.option)
 		self.attribute_names = list(self.option.keys())
 		self.max_values = list(self.option_max.values())
 		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
 		# menu bar 的小方塊
-		self.height = self.display_surface.get_size()[1] * 0.8
-		self.width = self.display_surface.get_size()[0] // 6
+		self.height = self.layer.get_size()[1] * 0.8
+		self.width = self.layer.get_size()[0] // 6
 		self.create_items()
 
 		# selection system 
@@ -108,12 +108,12 @@ class GameOption:
 
 		for item, index in enumerate(range(self.attribute_nr)):
 			# horizontal position
-			full_width = self.display_surface.get_size()[0]
+			full_width = self.layer.get_size()[0]
 			increment = full_width // self.attribute_nr
 			left = (item * increment) + (increment - self.width) // 2
 			
 			# vertical position 
-			top = self.display_surface.get_size()[1] * 0.1
+			top = self.layer.get_size()[1] * 0.1
 
 			# create the object 
 			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
@@ -166,7 +166,7 @@ class GameOption:
 			name = self.attribute_names[index]
 			value = self.option[(list(self.option.keys())[index])]
 			max_value = self.max_values[index]
-			item.display(self.display_surface,self.selection_index,name,value,max_value,0)
+			item.display(self.layer,self.selection_index,name,value,max_value,0)
 
 class SettingScrollBar:
 	def __init__(self,l,t,w,h,index,font):
