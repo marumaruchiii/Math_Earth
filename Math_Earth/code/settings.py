@@ -52,16 +52,16 @@ magic_data = {
 
 # item
 item_data = {
-	'item_0': {'graphic':'./graphics/particles/flame/fire.png'},
-	'item_1': {'graphic':'./graphics/particles/heal/heal.png'},
-	'item_2': {'graphic':'./graphics/particles/flame/fire.png'},
-	'item_3': {'graphic':'./graphics/particles/heal/heal.png'},
-	'item_4': {'graphic':'./graphics/particles/flame/fire.png'},
-	'item_5': {'graphic':'./graphics/particles/heal/heal.png'},
-	'item_6': {'graphic':'./graphics/particles/flame/fire.png'},
-	'item_7': {'graphic':'./graphics/particles/heal/heal.png'},
-	'item_8': {'graphic':'./graphics/particles/flame/fire.png'},
-	'item_9': {'graphic':'./graphics/particles/heal/heal.png'},
+	'item_0': {'graphic':'./graphics/item/book/0.png'},
+	'item_1': {'graphic':'./graphics/item/book/1.png'},
+	'item_2': {'graphic':'./graphics/item/book/2.png'},
+	'item_3': {'graphic':'./graphics/item/book/3.png'},
+	'item_4': {'graphic':'./graphics/item/food/0.png'},
+	'item_5': {'graphic':'./graphics/item/food/1.png'},
+	'item_6': {'graphic':'./graphics/item/food/2.png'},
+	'item_7': {'graphic':'./graphics/item/food/3.png'},
+	'item_8': {'graphic':'./graphics/item/food/4.png'},
+	'item_9': {'graphic':'./graphics/item/book/0.png'},
     }
 
 # enemy
