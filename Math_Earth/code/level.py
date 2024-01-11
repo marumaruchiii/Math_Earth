@@ -128,7 +128,7 @@ class Level:
 		for npc in self.npcs:
 			cent_npc = Vector2(npc.rect.center)
 			distance_to_npc = cent_player.distance_to(cent_npc)
-			if distance_to_npc <= TILESIZE:
+			if distance_to_npc <= NPC_AVAILABLE_DISTANCE:
 				self.active_npc = npc
 				return True
 		self.active_npc = None
@@ -177,13 +177,11 @@ class Level:
 		self.pause_trigger = 'game_menu'
 		self.game_paused = not self.game_paused 
 
-	def toggle_dialogue(self):
+	def toggle_dialog(self):
 		if not self.check_available_npc():	return
-		self.pause_trigger = 'dialogue'
+		self.pause_trigger = 'dialog'
 		self.game_paused = not self.game_paused
-
-		
-		
+	
 	def run(self):
 		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
@@ -192,7 +190,7 @@ class Level:
 		if self.game_paused:
 			if self.pause_trigger == 'skill_menu':	self.upgrade.display()
 			elif self.pause_trigger == 'game_menu':	self.game_option.display()
-			elif self.pause_trigger == 'dialogue':	self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
+			elif self.pause_trigger == 'dialog':	self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
 			else:									return
 		else:
 			self.sprs_visible.update()

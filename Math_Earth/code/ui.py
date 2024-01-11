@@ -1,4 +1,5 @@
 import pygame
+from pygame.font import Font
 from settings import * 
 
 class UI:
@@ -6,7 +7,7 @@ class UI:
 		
 		# general 
 		self.layer = pygame.display.get_surface()
-		self.font = pygame.font.Font(UI_FONT,UI_FONT_SIZE)
+		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
 
 		# bar setup 
 		self.health_bar_rect = pygame.Rect(10,10,HEALTH_BAR_WIDTH,BAR_HEIGHT)
@@ -46,7 +47,7 @@ class UI:
 		pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect,3)
 
 	def show_exp(self,exp):
-		text_surf = self.font.render(str(int(exp)),False,TEXT_COLOR)
+		text_surf = self.ui_font.render(str(int(exp)),False,TEXT_COLOR)
 		x = self.layer.get_size()[0] - 20
 		y = self.layer.get_size()[1] - 20
 		text_rect = text_surf.get_rect(bottomright = (x,y))
@@ -55,7 +56,7 @@ class UI:
 		self.layer.blit(text_surf,text_rect)
 		pygame.draw.rect(self.layer,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
 
-	def show_dialogue(self, text, npc_icon):
+	def show_dialog(self, text, npc_icon):
 		x = 0
 		y = self.layer.get_size()[1] - 180
 		w = self.layer.get_size()[0]
@@ -68,7 +69,7 @@ class UI:
 		icon_rect = npc_icon.get_rect(topleft=(x+20,y+20))
 		self.layer.blit(npc_icon,icon_rect)
 
-		text_surf = self.font.render(text,False,TEXT_COLOR)
+		text_surf = self.ui_font.render(text,False,TEXT_COLOR)
 		text_rect = text_surf.get_rect(topleft=(x+100,y+20))
 		self.layer.blit(text_surf,text_rect)
 

@@ -1,4 +1,5 @@
 import pygame
+from pygame.font import Font
 from settings import *
 
 class Upgrade:
@@ -10,7 +11,7 @@ class Upgrade:
 		self.attribute_nr = len(player.stats)
 		self.attribute_names = list(player.stats.keys())
 		self.max_values = list(player.max_stats.values())
-		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+		self.ui_font = Font(UI_FONT, UI_FONT_SIZE)
 
 		# item creation
 		self.height = self.layer.get_size()[1] * 0.8
@@ -59,7 +60,7 @@ class Upgrade:
 			top = self.layer.get_size()[1] * 0.1
 
 			# create the object 
-			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
+			item = SettingScrollBar(left,top,self.width,self.height,index,self.ui_font)
 			self.item_list.append(item)
 
 	def display(self):
@@ -91,7 +92,7 @@ class GameOption:
 		self.attribute_nr = len(self.option)
 		self.attribute_names = list(self.option.keys())
 		self.max_values = list(self.option_max.values())
-		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+		self.ui_font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
 
 		# menu bar 的小方塊
 		self.height = self.layer.get_size()[1] * 0.8
@@ -116,7 +117,7 @@ class GameOption:
 			top = self.layer.get_size()[1] * 0.1
 
 			# create the object 
-			item = SettingScrollBar(left,top,self.width,self.height,index,self.font)
+			item = SettingScrollBar(left,top,self.width,self.height,index,self.ui_font)
 			self.item_list.append(item)
 
 	def game_option_setting(self, is_up):
@@ -172,17 +173,17 @@ class SettingScrollBar:
 	def __init__(self,l,t,w,h,index,font):
 		self.rect = pygame.Rect(l,t,w,h)
 		self.index = index
-		self.font = font
+		self.ui_font = font
 
 	def display_names(self,surface,name,cost,selected):
 		color = TEXT_COLOR_SELECTED if selected else TEXT_COLOR
 
 		# title
-		title_surf = self.font.render(name,False,color)
+		title_surf = self.ui_font.render(name,False,color)
 		title_rect = title_surf.get_rect(midtop = self.rect.midtop + pygame.math.Vector2(0,20))
 
 		# cost 
-		cost_surf = self.font.render(f'{int(cost)}',False,color)
+		cost_surf = self.ui_font.render(f'{int(cost)}',False,color)
 		cost_rect = cost_surf.get_rect(midbottom = self.rect.midbottom - pygame.math.Vector2(0,20))
 
 		# draw 

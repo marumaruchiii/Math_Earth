@@ -132,7 +132,7 @@ class Player(Entity):
 
 				self.magic = list(magic_data.keys())[self.magic_index]
 
-			# NPC dialogue
+			# NPC dialog
 			if keys[pygame.K_f]:
 				pass
 
@@ -235,7 +235,7 @@ class NPC(Entity):
 	def idle(self):
 		pass
 
-	def dialogue(self):
+	def dialog(self):
 		pass
 
 	def update(self):

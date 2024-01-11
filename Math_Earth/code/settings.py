@@ -34,6 +34,9 @@ BAR_COLOR = '#EEEEEE'
 BAR_COLOR_SELECTED = '#111111'
 UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
 
+# NPC
+NPC_AVAILABLE_DISTANCE = 2.5 * TILESIZE
+
 # weapons 
 weapon_data = {
 	'sword': {'cooldown': 100, 'damage': 15,'graphic':'./graphics/weapons/sword/full.png'},
