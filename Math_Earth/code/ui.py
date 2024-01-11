@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from pygame.font import Font
+from pygame.transform import scale
 from moviepy.editor import VideoFileClip
 from settings import * 
 
@@ -10,6 +11,7 @@ class UI:
 		# general 
 		self.layer = pygame.display.get_surface()
 		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
+		self.chat_font = Font(UI_FONT, CHAT_FONT_SIZE)
 
 		# bar setup 
 		self.health_bar_rect = pygame.Rect(10,10,HEALTH_BAR_WIDTH,BAR_HEIGHT)
@@ -68,11 +70,12 @@ class UI:
 		pygame.draw.rect(self.layer,UI_BG_COLOR,bg_rect)
 		pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect.inflate(thick,thick),thick)
 
+		npc_icon = scale(npc_icon, (NPC_ICON_SIZE, NPC_ICON_SIZE))
 		icon_rect = npc_icon.get_rect(topleft=(x+20,y+20))
 		self.layer.blit(npc_icon,icon_rect)
 
-		text_surf = self.ui_font.render(text,False,TEXT_COLOR)
-		text_rect = text_surf.get_rect(topleft=(x+100,y+20))
+		text_surf = self.chat_font_font.render(text,False,TEXT_COLOR)
+		text_rect = text_surf.get_rect(topleft=(x+180,y+20))
 		self.layer.blit(text_surf,text_rect)
 
 	def selection_box(self,left,top, has_switched):
