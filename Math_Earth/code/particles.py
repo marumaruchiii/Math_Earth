@@ -24,8 +24,8 @@ class AnimationPlayer:
 			'raccoon': import_folder('./graphics/particles/raccoon'),
 			'spirit': import_folder('./graphics/particles/nova'),
 			'bamboo': import_folder('./graphics/particles/bamboo'),
-			'bamboo yellow': import_folder('./graphics/particles/bamboo yellow'),
-			'Cyclope2': import_folder('./graphics/particles/Cyclope2'),
+			'bamboo yellow': import_folder('./graphics/particles/smoke_orange'),
+			'Cyclope2': import_folder('./graphics/particles/smoke2'),
 			
 			# leafs 
 			'leaf': (
