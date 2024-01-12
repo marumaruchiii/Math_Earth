@@ -147,9 +147,9 @@ class GameStartMenu:
 		self.active_button_index = 0
 		# x 0-698 y 340-720
 		self.buttons = {
-			'Game Start':(349, 460),
+			'Game Start':(349, 450),
 			'Options':(349, 530),
-			'Exit':(349, 600),
+			'Exit':(349, 610),
 		}
 
 		# OP 片頭
