@@ -205,7 +205,9 @@ class GameStartMenu:
 
 	def enter_start_menu(self):
 		self.gameStart_sound = pygame.mixer.Sound('./audio/MATH_EARTH_CV_AI.wav')
+		self.gameStartBGM_sound = pygame.mixer.Sound('./audio/Gamestart_BGM.ogg')		
 		self.gameStart_sound.play()
+		#self.gameStartBGM_sound.play()
 		loop = True
 		while loop:
 			for event in pygame.event.get():

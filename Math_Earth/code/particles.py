@@ -9,7 +9,7 @@ class AnimationPlayer:
 			'flame': import_folder('./graphics/particles/flame/frames'),
 			'aura': import_folder('./graphics/particles/aura'),
 			'heal': import_folder('./graphics/particles/heal/frames'),
-			'Ice1': import_folder('./graphics/particles/Ice1'),
+			'Ice1': import_folder('./graphics/particles/Ice1/Ice1'),
 			
 			# attacks 
 			'claw': import_folder('./graphics/particles/claw'),
