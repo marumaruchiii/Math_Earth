@@ -94,11 +94,12 @@ class Level:
 									self.sprs_obstacle,
 									'paul'))
 							else:
-								if col == '390': monster_name = 'bamboo'
-								elif col == '391': monster_name = 'spirit' #spirit
-								elif col == '392': monster_name ='raccoon'
-								elif col == '393': monster_name = 'boxx' #boxx 393
-								elif col == '395': monster_name ='Cyclope2'
+								if col == '390': monster_name = 'bamboo' #葉
+								elif col == '391': monster_name = 'spirit' #鬼火
+								elif col == '392': monster_name ='raccoon' #熊
+								elif col == '393': monster_name = 'squid' # axolot 393
+								elif col == '395': monster_name ='Cyclope2' #單眼仔
+								elif col == '396': monster_name ='bamboo yellow' #黃葉
 								else: monster_name = 'squid'
 								Enemy(
 									monster_name,

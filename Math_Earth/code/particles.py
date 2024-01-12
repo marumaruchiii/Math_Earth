@@ -22,7 +22,6 @@ class AnimationPlayer:
 			# monster deaths
 			'squid': import_folder('./graphics/particles/smoke_orange'),
 			'raccoon': import_folder('./graphics/particles/raccoon'),
-			'boxx': import_folder('./graphics/particles/boxx'), #boxx
 			'spirit': import_folder('./graphics/particles/nova'),
 			'bamboo': import_folder('./graphics/particles/bamboo'),
 			'bamboo yellow': import_folder('./graphics/particles/bamboo yellow'),
