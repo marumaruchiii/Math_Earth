@@ -190,7 +190,7 @@ class Level:
 		if self.game_paused:
 			if self.pause_trigger == 'skill_menu':	self.upgrade.display()
 			elif self.pause_trigger == 'game_menu':	self.game_option.display()
-			elif self.pause_trigger == 'dialog':	self.ui.show_dialogue(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
+			elif self.pause_trigger == 'dialog':	self.ui.show_dialog(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
 			else:									return
 		else:
 			self.sprs_visible.update()

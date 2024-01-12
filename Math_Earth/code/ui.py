@@ -75,7 +75,7 @@ class UI:
 		icon_rect = npc_icon.get_rect(topleft=(x+20,y+20))
 		self.layer.blit(npc_icon,icon_rect)
 
-		text_surf = self.chat_font_font.render(text,False,TEXT_COLOR)
+		text_surf = self.chat_font.render(text,False,TEXT_COLOR)
 		text_rect = text_surf.get_rect(topleft=(x+180,y+20))
 		self.layer.blit(text_surf,text_rect)
 
