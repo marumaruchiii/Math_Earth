@@ -18,6 +18,7 @@ ITEM_BOX_SIZE = 80
 UI_FONT = './graphics/font/BoutiqueBitmap9x9_1.7.ttf'
 UI_FONT_SIZE = 18
 CHAT_FONT_SIZE = 36
+MENU_FONT_SIZE = 48
 
 # general colors
 WATER_COLOR = '#71ddee'

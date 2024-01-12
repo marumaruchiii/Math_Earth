@@ -1,7 +1,8 @@
 import pygame
 from sys import exit
 from pygame.font import Font
-from pygame.transform import scale
+from pygame.transform import scale, flip
+from pygame import Rect
 from moviepy.editor import VideoFileClip
 from settings import * 
 
@@ -143,35 +144,86 @@ class GameStartMenu:
 	def __init__(self, window, clock) -> None:
 		self.window = window
 		self.clock = clock
+		self.active_button_index = 0
+		# x 0-698 y 340-720
+		self.buttons = {
+			'Game Start':(349, 460),
+			'Options':(349, 530),
+			'Exit':(349, 600),
+		}
+
+		# OP 片頭
 		self.clip = VideoFileClip('./video/opening.mp4')
 
 		# ui general 
 		self.layer = pygame.display.get_surface()
 		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
+		self.menu_font = Font(UI_FONT, MENU_FONT_SIZE)
 
 		# POSTER底圖
 		self.background_art = pygame.image.load('./graphics/game_start/POSTER.png').convert()
+		self.update_menu_text(self.background_art)
+
+		#指標 (三角形)
+		self.img_cursor = pygame.image.load('./graphics/game_start/tri.png').convert_alpha()
+		self.img_cursor = scale(self.img_cursor, (ITEM_BOX_SIZE//2,ITEM_BOX_SIZE//2))
+		self.img_cursor = flip(self.img_cursor, True, False)
 
 	def play_opening_video(self):
 		self.clip.preview()
 		self.clip.close()
 
+	def draw_text(self, text, pos, surf):
+		text_surf = self.menu_font.render(text,False,TEXT_COLOR)
+		text_rect = text_surf.get_rect(center=pos)
+		surf.blit(text_surf,text_rect)
+
+	def update_menu_text(self, surf):
+		for key in self.buttons.keys():
+			self.draw_text(key, self.buttons[key], surf)
+
+	def draw_cursor(self, index, surf):
+		key_list = list(self.buttons.keys())
+		key = key_list[index]
+		pos_y = self.buttons[key][1]
+		cur_rect = self.img_cursor.get_rect(center=(160, pos_y))
+		surf.blit(self.img_cursor,cur_rect)
+
+	def get_active_button(self, is_down):
+		if is_down:
+			self.active_button_index += 1
+		else:
+			self.active_button_index -= 1
+		#防止button Out of Range
+		num = len(self.buttons.keys())
+		if self.active_button_index < 0:
+			self.active_button_index += num
+		if self.active_button_index >= num:
+			self.active_button_index -= num
+
 	def enter_start_menu(self):
-		run = True
-		while run:
+		loop = True
+		while loop:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					exit()
 				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_p:
-						run = False
+					if event.key in [pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_SPACE]:
+						if self.active_button_index == 0:
+							loop = False
+						if self.active_button_index == 1:
+							pass
+						if self.active_button_index == 2:
+							pygame.quit()
+							exit()
 					if event.key == pygame.K_UP:
-						pass
+						self.get_active_button(False)
 					if event.key == pygame.K_DOWN:
-						pass
+						self.get_active_button(True)
 
 			self.layer.blit(self.background_art, (0,0))
+			self.draw_cursor(self.active_button_index, self.layer)
 			pygame.display.update()
 			self.clock.tick(FPS)
 class SettingScrollBar:
