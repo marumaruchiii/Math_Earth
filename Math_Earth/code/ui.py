@@ -155,6 +155,7 @@ class GameStartMenu:
 		# OP 片頭
 		self.clip = VideoFileClip('./video/opening.mp4')
 
+
 		# ui general 
 		self.layer = pygame.display.get_surface()
 		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
@@ -163,6 +164,7 @@ class GameStartMenu:
 		# POSTER底圖
 		self.background_art = pygame.image.load('./graphics/game_start/POSTER.png').convert()
 		self.update_menu_text(self.background_art)
+		
 
 		#指標 (三角形)
 		self.img_cursor = pygame.image.load('./graphics/game_start/tri.png').convert_alpha()
@@ -202,6 +204,8 @@ class GameStartMenu:
 			self.active_button_index -= num
 
 	def enter_start_menu(self):
+		self.gameStart_sound = pygame.mixer.Sound('./audio/MATH_EARTH_CV_AI.wav')
+		self.gameStart_sound.play()
 		loop = True
 		while loop:
 			for event in pygame.event.get():
