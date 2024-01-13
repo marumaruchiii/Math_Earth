@@ -171,6 +171,9 @@ class GameStartMenu:
 		self.img_cursor = scale(self.img_cursor, (ITEM_BOX_SIZE//2,ITEM_BOX_SIZE//2))
 		self.img_cursor = flip(self.img_cursor, True, False)
 
+		self.cursor_sound = pygame.mixer.Sound('./audio/Menu2.wav')
+		self.cursor_sound.set_volume(0.3)
+
 	def play_opening_video(self):
 		self.clip.preview()
 		self.clip.close()
@@ -192,6 +195,7 @@ class GameStartMenu:
 		surf.blit(self.img_cursor,cur_rect)
 
 	def get_active_button(self, is_down):
+		self.cursor_sound.play()
 		if is_down:
 			self.active_button_index += 1
 		else:
