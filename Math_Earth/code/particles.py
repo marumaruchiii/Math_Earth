@@ -10,6 +10,7 @@ class AnimationPlayer:
 			'aura': import_folder('./graphics/particles/aura'),
 			'heal': import_folder('./graphics/particles/heal/frames'),
 			'Ice1': import_folder('./graphics/particles/Ice1/Ice1'),
+			'Rock1': import_folder('./graphics/particles/Rock1/Rock1'),
 			
 			# attacks 
 			'claw': import_folder('./graphics/particles/claw'),

@@ -124,6 +124,8 @@ class Level:
 		if style == 'Ice1':
 			self.magic_player.Ice1(self.player,cost,[self.sprs_visible,self.attack_sprites])
 		
+		if style == 'Rock1':
+			self.magic_player.Rock1(self.player,cost,[self.sprs_visible,self.attack_sprites])
 
 	def use_item(self):
 		pass
