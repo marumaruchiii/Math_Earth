@@ -17,7 +17,7 @@ NPC_ICON_SIZE = 140
 ITEM_BOX_SIZE = 80
 UI_FONT = './graphics/font/BoutiqueBitmap9x9_1.7.ttf'
 UI_FONT_SIZE = 18
-CHAT_FONT_SIZE = 36
+CHAT_FONT_SIZE = 30
 MENU_FONT_SIZE = 48
 
 # general colors
