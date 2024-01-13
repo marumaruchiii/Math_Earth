@@ -52,7 +52,7 @@ weapon_data = {
 magic_data = {
 	'flame': {'strength': 5,'cost': 4,'graphic':'./graphics/particles/flame/fire.png'},
 	'Ice1': {'strength': 12,'cost': 8,'graphic':'./graphics/particles/Ice1/Ice1.png'},
-    'Rock1': {'strength': 20,'cost': 25,'graphic':'./graphics/particles/Rock1/Rock1.png'},
+    'Rock1': {'strength': 20,'cost': 15,'graphic':'./graphics/particles/Rock1/Rock1.png'},
 	'heal' : {'strength': 20,'cost': 4,'graphic':'./graphics/particles/heal/heal.png'}}
 
 # item

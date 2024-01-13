@@ -35,7 +35,7 @@ class MagicPlayer:
 			elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
 			elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
 			else: direction = pygame.math.Vector2(0,1)
-
+			#火魔射程7格
 			for i in range(1,8):
 				if direction.x: #horizontal
 					offset_x = (direction.x * i) * TILESIZE
@@ -57,7 +57,7 @@ class MagicPlayer:
 			elif player.status.split('_')[0] == 'left': direction = pygame.math.Vector2(-1,0)
 			elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
 			else: direction = pygame.math.Vector2(0,1)
-
+			#冰魔射程5格
 			for i in range(1,6):
 				if direction.x: #horizontal
 					offset_x = (direction.x * i) * TILESIZE
@@ -79,6 +79,7 @@ class MagicPlayer:
 			elif player.status.split('_')[0] == 'up': direction = pygame.math.Vector2(0,-1)
 			else: direction = pygame.math.Vector2(0,1)
 
+			#土魔射程比其他短很多只有3格 但高攻 高MP expense
 			for i in range(1,4):
 				if direction.x: #horizontal
 					offset_x = (direction.x * i) * TILESIZE
