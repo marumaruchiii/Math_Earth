@@ -13,6 +13,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade, GameOption
 from entity import VisibleSprites
+from chat import ChatScriptOfPaul
 
 class Level:
 	def __init__(self):
@@ -92,7 +93,8 @@ class Level:
 									(x,y),
 									[self.sprs_visible,self.sprs_obstacle],
 									self.sprs_obstacle,
-									'paul'))
+									'paul',
+									ChatScriptOfPaul()) )
 							else:
 								if col == '390': monster_name = 'bamboo' #葉
 								elif col == '391': monster_name = 'spirit' #鬼火
@@ -176,29 +178,44 @@ class Level:
 
 		self.player.exp += amount
 
+	def check_dialog(self):
+		if self.pause_trigger == 'dialog':
+			self.active_npc.chat.script_unlock()
+			if self.active_npc.chat.first_time:
+				return True
+		return False
+
 	def toggle_skill_menu(self):
+		if self.check_dialog():
+			return
 		self.pause_trigger = 'skill_menu'
 		self.game_paused = not self.game_paused 
 
 	def toggle_game_menu(self):
+		if self.check_dialog():
+			return
 		self.pause_trigger = 'game_menu'
 		self.game_paused = not self.game_paused 
 
 	def toggle_dialog(self):
-		if not self.check_available_npc():	return
-		self.pause_trigger = 'dialog'
-		self.game_paused = not self.game_paused
-	
+		if self.check_available_npc():
+			if self.check_dialog():
+				return
+			self.pause_trigger = 'dialog'
+			self.game_paused = not self.game_paused
+
 	def run(self):
 		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
 
 		#檢查Event 因應不同的出不同menu
 		if self.game_paused:
-			if self.pause_trigger == 'skill_menu':	self.upgrade.display()
-			elif self.pause_trigger == 'game_menu':	self.game_option.display()
-			elif self.pause_trigger == 'dialog':	self.ui.show_dialog(f"Hi! My name is {self.active_npc.npc_name}. 我是保羅", self.active_npc.image)
-			else:									return
+			if self.pause_trigger == 'skill_menu':
+				self.upgrade.display()
+			elif self.pause_trigger == 'game_menu':
+				self.game_option.display()
+			elif self.pause_trigger == 'dialog':
+				self.active_npc.dialog()
 		else:
 			self.sprs_visible.update()
 			self.sprs_visible.enemy_update(self.player)
