@@ -50,23 +50,22 @@ weapon_data = {
 
 # magic
 magic_data = {
+	'heal' : {'strength': 20,'cost': 4,'graphic':'./graphics/particles/heal/heal.png'},
 	'flame': {'strength': 5,'cost': 4,'graphic':'./graphics/particles/flame/fire.png'},
 	'Ice1': {'strength': 12,'cost': 8,'graphic':'./graphics/particles/Ice1/Ice1.png'},
-    'Rock1': {'strength': 20,'cost': 15,'graphic':'./graphics/particles/Rock1/Rock1.png'},
-	'heal' : {'strength': 20,'cost': 4,'graphic':'./graphics/particles/heal/heal.png'}}
+	'Rock1': {'strength': 20,'cost': 15,'graphic':'./graphics/particles/Rock1/Rock1.png'}}
 
 # item
 item_data = {
-	'item_0': {'graphic':'./graphics/item/book/0.png'},
-	'item_1': {'graphic':'./graphics/item/book/1.png'},
-	'item_2': {'graphic':'./graphics/item/book/2.png'},
-	'item_3': {'graphic':'./graphics/item/book/3.png'},
-	'item_4': {'graphic':'./graphics/item/food/0.png'},
-	'item_5': {'graphic':'./graphics/item/food/1.png'},
-	'item_6': {'graphic':'./graphics/item/food/2.png'},
-	'item_7': {'graphic':'./graphics/item/food/3.png'},
-	'item_8': {'graphic':'./graphics/item/food/4.png'},
-	'item_9': {'graphic':'./graphics/item/book/0.png'},
+	'book_heal': {'graphic':'./graphics/item/book/0.png'},
+	'book_flame': {'graphic':'./graphics/item/book/2.png'},
+	'book_Ice1': {'graphic':'./graphics/item/book/3.png'},
+	'book_Rock1': {'graphic':'./graphics/item/book/1.png'},
+	'food0': {'graphic':'./graphics/item/food/0.png'},
+	'food1': {'graphic':'./graphics/item/food/1.png'},
+	'food2': {'graphic':'./graphics/item/food/2.png'},
+	'food3': {'graphic':'./graphics/item/food/3.png'},
+	'food4': {'graphic':'./graphics/item/food/4.png'},
     }
 
 # enemy

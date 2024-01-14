@@ -79,56 +79,61 @@ class UI:
 		text_rect = text_surf.get_rect(topleft=(x+180,y+20))
 		self.layer.blit(text_surf,text_rect)
 
-	def selection_box(self,left,top, has_switched):
+	def selection_box(self,left,top, has_switched, text):
 		bg_rect = pygame.Rect(left,top,ITEM_BOX_SIZE,ITEM_BOX_SIZE)
 		pygame.draw.rect(self.layer,UI_BG_COLOR,bg_rect)
 		if has_switched:
 			pygame.draw.rect(self.layer,UI_BORDER_COLOR_ACTIVE,bg_rect,3)
 		else:
 			pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect,3)
+		# 印出按鍵提示
+		text_surf = self.ui_font.render(text,True,'White')
+		text_rect = text_surf.get_rect(topleft=(left+5,top+5))
+		self.layer.blit(text_surf,text_rect)
 		return bg_rect
 
 	def weapon_hud(self,weapon_index,has_switched):
-		bg_rect = self.selection_box(10,630,has_switched)
+		bg_rect = self.selection_box(10,630,has_switched, 'Q')
 		weapon_surf = self.weapon_graphics[weapon_index]
 		weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
 
 		self.layer.blit(weapon_surf,weapon_rect)
 
 	def magic_hud(self,magic_index,has_switched):
-		bg_rect = self.selection_box(90,630,has_switched)
-		magic_surf = self.magic_graphics[magic_index]
-		magic_rect = magic_surf.get_rect(center = bg_rect.center)
+		bg_rect = self.selection_box(90,630,has_switched, 'E')
+		if magic_index != None:
+			magic_surf = self.magic_graphics[magic_index]
+			magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
-		self.layer.blit(magic_surf,magic_rect)
+			self.layer.blit(magic_surf,magic_rect)
 
 	#Item 0-9 各自存
 	def item_hud(self,item_index,has_switched):
 		if item_index == 0:
-			bg_rect = self.selection_box(222,630,has_switched)
+			bg_rect = self.selection_box(222,630,has_switched, '1')
 		if item_index == 1:
-			bg_rect = self.selection_box(306,630,has_switched)
+			bg_rect = self.selection_box(306,630,has_switched, '2')
 		if item_index == 2:
-			bg_rect = self.selection_box(390,630,has_switched)
+			bg_rect = self.selection_box(390,630,has_switched, '3')
 		if item_index == 3:
-			bg_rect = self.selection_box(474,630,has_switched)
+			bg_rect = self.selection_box(474,630,has_switched, '4')
 		if item_index == 4:
-			bg_rect = self.selection_box(558,630,has_switched)
+			bg_rect = self.selection_box(558,630,has_switched, '5')
 		if item_index == 5:
-			bg_rect = self.selection_box(642,630,has_switched)
+			bg_rect = self.selection_box(642,630,has_switched, '6')
 		if item_index == 6:
-			bg_rect = self.selection_box(726,630,has_switched)
+			bg_rect = self.selection_box(726,630,has_switched, '7')
 		if item_index == 7:
-			bg_rect = self.selection_box(810,630,has_switched)
+			bg_rect = self.selection_box(810,630,has_switched, '8')
 		if item_index == 8:
-			bg_rect = self.selection_box(894,630,has_switched)
+			bg_rect = self.selection_box(894,630,has_switched, '9')
 		if item_index == 9:
-			bg_rect = self.selection_box(978,630,has_switched)
+			bg_rect = self.selection_box(978,630,has_switched, '0')
 			
-		item_surf = self.item_graphics[item_index]
-		item_rect = item_surf.get_rect(center = bg_rect.center)
+		# item_surf = self.item_graphics[item_index]
+		# item_rect = item_surf.get_rect(center = bg_rect.center)
 
-		self.layer.blit(item_surf,item_rect)
+		# self.layer.blit(item_surf,item_rect)
 
 	def display(self,player):
 		self.show_bar(player.health,player.stats['health'],self.health_bar_rect,HEALTH_COLOR)

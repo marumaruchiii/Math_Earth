@@ -31,8 +31,11 @@ class Player(Entity):
 
 		# magic 
 		self.create_magic = create_magic
-		self.magic_index = 0
-		self.magic = list(magic_data.keys())[self.magic_index]
+		# 可用魔法清單
+		self.magic_available = []
+		# 初始狀態改成都不能用
+		self.magic_index = None
+		self.magic = None
 		self.can_switch_magic = True
 		self.magic_switch_time = None
 
@@ -103,12 +106,14 @@ class Player(Entity):
 
 			# magic input 
 			if keys[pygame.K_LCTRL]:
+				if self.magic == None:
+					return
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
-				style = list(magic_data.keys())[self.magic_index]
-				strength = list(magic_data.values())[self.magic_index]['strength'] + self.stats['magic']
-				cost = list(magic_data.values())[self.magic_index]['cost']
-				self.create_magic(style,strength,cost)
+				# 花了好久才看得懂... 他原本寫得好複雜QAQ
+				strength = magic_data[self.magic]['strength'] + self.stats['magic']
+				cost = magic_data[self.magic]['cost']
+				self.create_magic(self.magic,strength,cost)
 
 			if keys[pygame.K_q] and self.can_switch_weapon:
 				self.can_switch_weapon = False
@@ -122,19 +127,30 @@ class Player(Entity):
 				self.weapon = list(weapon_data.keys())[self.weapon_index]
 
 			if keys[pygame.K_e] and self.can_switch_magic:
+				# 如果沒有魔法可以用  就不能換
+				if len(self.magic_available) == 0:
+					return
+
 				self.can_switch_magic = False
 				self.magic_switch_time = pygame.time.get_ticks()
-				
-				if self.magic_index < len(list(magic_data.keys())) - 1:
-					self.magic_index += 1
-				else:
-					self.magic_index = 0
-
+				# 拿出list裡面的第1個魔法
+				self.magic_index = self.magic_available.pop(0)
+				# 拿來用
 				self.magic = list(magic_data.keys())[self.magic_index]
+				# 再讓他到最後面排隊
+				self.magic_available.append(self.magic_index)
 
 			# NPC dialog
 			if keys[pygame.K_f]:
 				pass
+
+	def active_magic(self, index):
+		if len(self.magic_available) == 0:
+			# 加入第1個魔法  設定為使用中的魔法
+			self.magic_index = index
+			self.magic = list(magic_data.keys())[self.magic_index]
+		# 把魔法加到可用list裡面
+		self.magic_available.append(index)
 
 	def get_status(self):
 

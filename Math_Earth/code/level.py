@@ -14,6 +14,7 @@ from magic import MagicPlayer
 from upgrade import Upgrade, GameOption
 from entity import VisibleSprites
 from chat import ChatScriptOfPaul
+from pygame.font import Font
 
 class Level:
 	def __init__(self):
@@ -102,6 +103,12 @@ class Level:
 									self.sprs_obstacle,
 									'paul',
 									ChatScriptOfPaul()) )
+								npc_center = Vector2(self.npcs[-1].rect.center)
+								text_center = npc_center - Vector2(0,40)
+								font = Font(UI_FONT,24)
+								text_surf = font.render('Paul',True,'Black')
+								text_rect = text_surf.get_rect(center=text_center)
+								self.floor_surf.blit(text_surf,text_rect)
 							else:
 								if col == '390': monster_name = 'bamboo' #葉
 								elif col == '391': monster_name = 'spirit' #鬼火
@@ -156,16 +163,17 @@ class Level:
 		self.current_attack = None
 
 	def item_drop_logic(self, pos, percent):
+		if len(self.book_list) == 0:
+			return
 		if randint(1,100) <= percent:
-			# 隨機挑一本書
+			# 隨機挑選一本書
 			book = choice(self.book_list)
 			# 掉落特效
 			self.animation_player.create_particles('drop',pos,self.sprs_visible)
 			self.animation_player.create_particles(book,pos,self.sprs_visible)
 			# 掉落音效
 			self.drop_sound.play()
-			pass
-		pass
+			self.book_list.remove(book)
 
 	def player_attack_logic(self):
 		if self.attack_sprites:
@@ -179,8 +187,8 @@ class Level:
 							for leaf in range(randint(3,6)):
 								self.animation_player.create_grass_particles(pos - offset,[self.sprs_visible])
 							target_sprite.kill()
-							# 100%掉落率
-							self.item_drop_logic(pos, 100)
+							# 20%掉落率
+							self.item_drop_logic(pos, 20)
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
 
