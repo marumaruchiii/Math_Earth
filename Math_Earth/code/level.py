@@ -7,7 +7,7 @@ from debug import debug
 from support import *
 from random import choice, randint
 from weapon import Weapon
-from ui import UI
+from ui import UI, Inventory
 from enemy import Enemy
 from particles import AnimationPlayer
 from magic import MagicPlayer
@@ -40,6 +40,7 @@ class Level:
 
 		# user interface 
 		self.ui = UI()
+		self.inventory = Inventory(self.ui)
 		self.upgrade = Upgrade(self.player)
 		self.game_option = GameOption()
 
@@ -52,7 +53,7 @@ class Level:
 		self.drop_sound.set_volume(0.5)
 
 		# 掉落書本清單
-		self.book_list = ['book1','book2','book3','book4']
+		self.drop_books = ['book_flame', 'book_Ice1', 'book_Rock1']
 
 	def create_map(self):
 		layouts = {
@@ -163,17 +164,18 @@ class Level:
 		self.current_attack = None
 
 	def item_drop_logic(self, pos, percent):
-		if len(self.book_list) == 0:
+		if len(self.drop_books) == 0:
 			return
 		if randint(1,100) <= percent:
 			# 隨機挑選一本書
-			book = choice(self.book_list)
+			book = choice(self.drop_books)
 			# 掉落特效
 			self.animation_player.create_particles('drop',pos,self.sprs_visible)
 			self.animation_player.create_particles(book,pos,self.sprs_visible)
 			# 掉落音效
 			self.drop_sound.play()
-			self.book_list.remove(book)
+			self.drop_books.remove(book)
+			self.inventory.get_item(book)
 
 	def player_attack_logic(self):
 		if self.attack_sprites:
@@ -236,6 +238,7 @@ class Level:
 	def run(self):
 		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
+		self.inventory.display()
 
 		#檢查Event 因應不同的出不同menu
 		if self.game_paused:
@@ -244,7 +247,9 @@ class Level:
 			elif self.pause_trigger == 'game_menu':
 				self.game_option.display()
 			elif self.pause_trigger == 'dialog':
-				self.active_npc.dialog()
+				item = self.active_npc.dialog()
+				if item:
+					self.inventory.get_item(item)
 		else:
 			self.sprs_visible.update()
 			self.sprs_visible.enemy_update(self.player)

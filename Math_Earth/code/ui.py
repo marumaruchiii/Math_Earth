@@ -12,7 +12,6 @@ class UI:
 		# general 
 		self.layer = pygame.display.get_surface()
 		self.ui_font = Font(UI_FONT,UI_FONT_SIZE)
-		self.chat_font = Font(UI_FONT, CHAT_FONT_SIZE)
 
 		# bar setup 
 		self.health_bar_rect = pygame.Rect(10,10,HEALTH_BAR_WIDTH,BAR_HEIGHT)
@@ -30,12 +29,6 @@ class UI:
 		for magic in magic_data.values():
 			magic = pygame.image.load(magic['graphic']).convert_alpha()
 			self.magic_graphics.append(magic)
-
-		# convert item dictionary
-		self.item_graphics = []
-		for item in item_data.values():
-			item = pygame.image.load(item['graphic']).convert_alpha()
-			self.item_graphics.append(item)
 
 	def show_bar(self,current,max_amount,bg_rect,color):
 		# draw bg 
@@ -60,24 +53,6 @@ class UI:
 		pygame.draw.rect(self.layer,UI_BG_COLOR,text_rect.inflate(20,20))
 		self.layer.blit(text_surf,text_rect)
 		pygame.draw.rect(self.layer,UI_BORDER_COLOR,text_rect.inflate(20,20),3)
-
-	def show_dialog(self, text, npc_icon):
-		x = 0
-		y = self.layer.get_size()[1] - 180
-		w = self.layer.get_size()[0]
-		h = 180
-		thick = 5
-		bg_rect = pygame.Rect(x,y,w,h)
-		pygame.draw.rect(self.layer,UI_BG_COLOR,bg_rect)
-		pygame.draw.rect(self.layer,UI_BORDER_COLOR,bg_rect.inflate(thick,thick),thick)
-
-		npc_icon = scale(npc_icon, (NPC_ICON_SIZE, NPC_ICON_SIZE))
-		icon_rect = npc_icon.get_rect(topleft=(x+20,y+20))
-		self.layer.blit(npc_icon,icon_rect)
-
-		text_surf = self.chat_font.render(text,False,TEXT_COLOR)
-		text_rect = text_surf.get_rect(topleft=(x+180,y+20))
-		self.layer.blit(text_surf,text_rect)
 
 	def selection_box(self,left,top, has_switched, text):
 		bg_rect = pygame.Rect(left,top,ITEM_BOX_SIZE,ITEM_BOX_SIZE)
@@ -107,34 +82,6 @@ class UI:
 
 			self.layer.blit(magic_surf,magic_rect)
 
-	#Item 0-9 各自存
-	def item_hud(self,item_index,has_switched):
-		if item_index == 0:
-			bg_rect = self.selection_box(222,630,has_switched, '1')
-		if item_index == 1:
-			bg_rect = self.selection_box(306,630,has_switched, '2')
-		if item_index == 2:
-			bg_rect = self.selection_box(390,630,has_switched, '3')
-		if item_index == 3:
-			bg_rect = self.selection_box(474,630,has_switched, '4')
-		if item_index == 4:
-			bg_rect = self.selection_box(558,630,has_switched, '5')
-		if item_index == 5:
-			bg_rect = self.selection_box(642,630,has_switched, '6')
-		if item_index == 6:
-			bg_rect = self.selection_box(726,630,has_switched, '7')
-		if item_index == 7:
-			bg_rect = self.selection_box(810,630,has_switched, '8')
-		if item_index == 8:
-			bg_rect = self.selection_box(894,630,has_switched, '9')
-		if item_index == 9:
-			bg_rect = self.selection_box(978,630,has_switched, '0')
-			
-		# item_surf = self.item_graphics[item_index]
-		# item_rect = item_surf.get_rect(center = bg_rect.center)
-
-		# self.layer.blit(item_surf,item_rect)
-
 	def display(self,player):
 		self.show_bar(player.health,player.stats['health'],self.health_bar_rect,HEALTH_COLOR)
 		self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,ENERGY_COLOR)
@@ -143,8 +90,69 @@ class UI:
 
 		self.weapon_hud(player.weapon_index,not player.can_switch_weapon)
 		self.magic_hud(player.magic_index,not player.can_switch_magic)
-		for i in range(10):
-			self.item_hud(i,not player.can_switch_item)
+
+class Inventory:
+	def __init__(self, ui) -> None:
+		self.ui = ui
+		self.item_in_bag = []
+
+		# 載入物品圖片
+		self.item_graphics = {}
+		for key in item_data.keys():
+			image = pygame.image.load(item_data[key]['graphic']).convert_alpha()
+			self.item_graphics.update({key:image})
+
+	# 玩家使用物品
+	def use_item(self,index):
+		if index < len(self.item_in_bag):
+			key = self.item_in_bag.pop(index)
+			return key
+		return None
+
+	# 玩家得到物品
+	def get_item(self,item):
+		if item in self.item_graphics.keys():
+			self.item_in_bag.append(item)
+
+	# 顯示物品圖片
+	def item_hud(self,rect,item):
+		item_surf = self.item_graphics[item]
+		item_rect = item_surf.get_rect(center = rect.center)
+		self.ui.layer.blit(item_surf,item_rect)
+
+	#Item 0-9 各自存
+	def display(self):
+		bg_rect = self.ui.selection_box(222,630,False, '1')
+		if 0 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[0])
+		bg_rect = self.ui.selection_box(306,630,False, '2')
+		if 1 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[1])
+		bg_rect = self.ui.selection_box(390,630,False, '3')
+		if 2 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[2])
+		bg_rect = self.ui.selection_box(474,630,False, '4')
+		if 3 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[3])
+		bg_rect = self.ui.selection_box(558,630,False, '5')
+		if 4 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[4])
+		bg_rect = self.ui.selection_box(642,630,False, '6')
+		if 5 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[5])
+		bg_rect = self.ui.selection_box(726,630,False, '7')
+		if 6 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[6])
+		bg_rect = self.ui.selection_box(810,630,False, '8')
+		if 7 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[7])
+		bg_rect = self.ui.selection_box(894,630,False, '9')
+		if 8 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[8])
+		bg_rect = self.ui.selection_box(978,630,False, '0')
+		if 9 < len(self.item_in_bag):
+			self.item_hud(bg_rect, self.item_in_bag[9])
+
 class GameStartMenu:
 	def __init__(self, window, clock) -> None:
 		self.window = window

@@ -46,10 +46,10 @@ class AnimationPlayer:
 			
 			# items
 			'drop': import_folder('./graphics/particles/smoke'),
-			'book1': self.resize_images(import_folder('./graphics/particles/book/book1')),
-			'book2': self.resize_images(import_folder('./graphics/particles/book/book2')),
-			'book3': self.resize_images(import_folder('./graphics/particles/book/book3')),
-			'book4': self.resize_images(import_folder('./graphics/particles/book/book4')),
+			'book_heal': self.resize_images(import_folder('./graphics/particles/book/book1')),
+			'book_flame': self.resize_images(import_folder('./graphics/particles/book/book3')),
+			'book_Ice1': self.resize_images(import_folder('./graphics/particles/book/book4')),
+			'book_Rock1': self.resize_images(import_folder('./graphics/particles/book/book2')),
 			}
 
 	def resize_images(self,frames):

@@ -110,7 +110,7 @@ class Player(Entity):
 					return
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
-				# 花了好久才看得懂... 他原本寫得好複雜QAQ
+				# 花了好久才看懂... 他原本寫得好複雜QAQ
 				strength = magic_data[self.magic]['strength'] + self.stats['magic']
 				cost = magic_data[self.magic]['cost']
 				self.create_magic(self.magic,strength,cost)
@@ -249,11 +249,18 @@ class NPC(Entity):
 		self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
 		self.obstacle_sprites = obstacle_sprites
 
+		self.inventory = ['book_heal']
+
 	def idle(self):
 		pass
 
 	def dialog(self):
 		self.chat.show_dialog(self.image)
+		# 第1次對話送書
+		if self.chat.trigger_times == 0 and 'book_heal' in self.inventory:
+			self.inventory.remove('book_heal')
+			return 'book_heal'
+		return None
 
 	def update(self):
 		self.idle()
