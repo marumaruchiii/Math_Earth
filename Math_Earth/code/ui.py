@@ -187,6 +187,9 @@ class GameStartMenu:
 		self.cursor_sound = pygame.mixer.Sound('./audio/Menu2.wav')
 		self.cursor_sound.set_volume(0.3)
 
+		# 按鍵操作說明
+		self.key_map = pygame.image.load('./graphics/test/control.png').convert_alpha()
+
 	def play_opening_video(self):
 		self.clip.preview()
 		self.clip.close()
@@ -222,9 +225,12 @@ class GameStartMenu:
 
 	def enter_start_menu(self):
 		self.gameStart_sound = pygame.mixer.Sound('./audio/MATH_EARTH_CV_AI.wav')
-		self.gameStartBGM_sound = pygame.mixer.Sound('./audio/Gamestart_BGM.ogg')		
+		self.gameStartBGM_sound = pygame.mixer.Sound('./audio/Gamestart_BGM.ogg')
+		self.gameStart_sound.set_volume(0.1)
+		self.gameStartBGM_sound.set_volume(0.1)
 		self.gameStart_sound.play()
 		#self.gameStartBGM_sound.play()
+		show_key_map = False
 		loop = True
 		while loop:
 			for event in pygame.event.get():
@@ -236,17 +242,21 @@ class GameStartMenu:
 						if self.active_button_index == 0:
 							loop = False
 						if self.active_button_index == 1:
-							pass
+							show_key_map = not show_key_map
 						if self.active_button_index == 2:
 							pygame.quit()
 							exit()
-					if event.key == pygame.K_UP:
-						self.get_active_button(False)
-					if event.key == pygame.K_DOWN:
-						self.get_active_button(True)
+					if not show_key_map:
+						if event.key == pygame.K_UP:
+							self.get_active_button(False)
+						if event.key == pygame.K_DOWN:
+							self.get_active_button(True)
 
 			self.layer.blit(self.background_art, (0,0))
-			self.draw_cursor(self.active_button_index, self.layer)
+			if show_key_map:
+				self.layer.blit(self.key_map, (0,0))
+			else:
+				self.draw_cursor(self.active_button_index, self.layer)
 			pygame.display.update()
 			self.clock.tick(FPS)
 class SettingScrollBar:
