@@ -42,9 +42,24 @@ class AnimationPlayer:
 				self.reflect_images(import_folder('./graphics/particles/leaf4')),
 				self.reflect_images(import_folder('./graphics/particles/leaf5')),
 				self.reflect_images(import_folder('./graphics/particles/leaf6'))
-				)
+				),
+			
+			# items
+			'drop': import_folder('./graphics/particles/smoke'),
+			'book1': self.resize_images(import_folder('./graphics/particles/book/book1')),
+			'book2': self.resize_images(import_folder('./graphics/particles/book/book2')),
+			'book3': self.resize_images(import_folder('./graphics/particles/book/book3')),
+			'book4': self.resize_images(import_folder('./graphics/particles/book/book4')),
 			}
-	
+
+	def resize_images(self,frames):
+		new_frames = []
+
+		for frame in frames:
+			resized_frame = pygame.transform.scale(frame,(48,48))
+			new_frames.append(resized_frame)
+		return new_frames
+
 	def reflect_images(self,frames):
 		new_frames = []
 

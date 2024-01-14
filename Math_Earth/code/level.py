@@ -46,6 +46,13 @@ class Level:
 		self.animation_player = AnimationPlayer()
 		self.magic_player = MagicPlayer(self.animation_player)
 
+		# 掉落音效
+		self.drop_sound = pygame.mixer.Sound('./audio/put_bag_roughly.mp3')
+		self.drop_sound.set_volume(0.5)
+
+		# 掉落書本清單
+		self.book_list = ['book1','book2','book3','book4']
+
 	def create_map(self):
 		layouts = {
 			'boundary': import_csv_layout('./map/fju_map_FloorBlocks.csv'),
@@ -148,6 +155,18 @@ class Level:
 			self.current_attack.kill()
 		self.current_attack = None
 
+	def item_drop_logic(self, pos, percent):
+		if randint(1,100) <= percent:
+			# 隨機挑一本書
+			book = choice(self.book_list)
+			# 掉落特效
+			self.animation_player.create_particles('drop',pos,self.sprs_visible)
+			self.animation_player.create_particles(book,pos,self.sprs_visible)
+			# 掉落音效
+			self.drop_sound.play()
+			pass
+		pass
+
 	def player_attack_logic(self):
 		if self.attack_sprites:
 			for attack_sprite in self.attack_sprites:
@@ -160,6 +179,8 @@ class Level:
 							for leaf in range(randint(3,6)):
 								self.animation_player.create_grass_particles(pos - offset,[self.sprs_visible])
 							target_sprite.kill()
+							# 100%掉落率
+							self.item_drop_logic(pos, 100)
 						else:
 							target_sprite.get_damage(self.player,attack_sprite.sprite_type)
 
