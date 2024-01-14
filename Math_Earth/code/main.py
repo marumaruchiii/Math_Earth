@@ -15,6 +15,8 @@ class Game:
 		self.screen.fill(WATER_COLOR)
 		self.clock = pygame.time.Clock()
 		self.start_menu = GameStartMenu(self.screen, self.clock)
+		self.start_menu.play_opening_video()
+		self.start_menu.enter_start_menu()
 		self.level = Level()
 
 	def run(self):
@@ -59,6 +61,4 @@ class Game:
 
 if __name__ == '__main__':
 	game = Game()
-	game.start_menu.play_opening_video()
-	game.start_menu.enter_start_menu()
 	game.run()
