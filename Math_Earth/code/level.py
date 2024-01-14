@@ -13,7 +13,7 @@ from particles import AnimationPlayer
 from magic import MagicPlayer
 from upgrade import Upgrade, GameOption
 from entity import VisibleSprites
-from chat import ChatScriptOfPaul
+from chat import ChatScriptOfPaul, ChatFoodie, ChatReading
 from pygame.font import Font
 
 class Level:
@@ -54,6 +54,13 @@ class Level:
 
 		# 掉落書本清單
 		self.drop_books = ['book_flame', 'book_Ice1', 'book_Rock1']
+		self.reading = ChatReading()
+		self.reading_index = None
+
+		# 掉落食物清單
+		self.drop_foods = ['food0','food1','food2','food3','food4']
+		self.foodie = ChatFoodie()
+		self.foodie_index = None
 
 	def create_map(self):
 		layouts = {
@@ -164,9 +171,15 @@ class Level:
 		self.current_attack = None
 
 	def item_drop_logic(self, pos, percent):
-		if len(self.drop_books) == 0:
-			return
+		# 書先掉完才會掉食物
 		if randint(1,100) <= percent:
+			if len(self.drop_books) == 0:
+				# 隨機挑選一
+				food = choice(self.drop_foods)
+				self.animation_player.create_particles('drop',pos,self.sprs_visible)
+				self.drop_sound.play()
+				self.inventory.get_item(food)
+				return
 			# 隨機挑選一本書
 			book = choice(self.drop_books)
 			# 掉落特效
@@ -235,6 +248,32 @@ class Level:
 			self.pause_trigger = 'dialog'
 			self.game_paused = not self.game_paused
 
+	# 吃完食物的效果
+	def foodie_start(self, index):
+		self.pause_trigger = 'foodie'
+		self.foodie_index = index
+		self.game_paused = True
+		# 吃完回血回魔
+		self.player.health += 50
+		if self.player.health > self.player.stats['health']:
+			self.player.health = self.player.stats['health']
+		self.player.energy += 30
+		if self.player.energy > self.player.stats['energy']:
+			self.player.energy = self.player.stats['energy']
+
+	# 使用書的效果
+	def reading_start(self, index):
+		self.pause_trigger = 'reading'
+		self.reading_index = index
+		self.game_paused = True
+		# 學到對應的魔法
+		self.player.active_magic(index)
+
+	# 對話結束
+	def dialog_end(self):
+		if self.pause_trigger in ['foodie','reading']:
+			self.game_paused = False
+
 	def run(self):
 		self.sprs_visible.update_player_movement(self.player)
 		self.ui.display(self.player)
@@ -250,6 +289,10 @@ class Level:
 				item = self.active_npc.dialog()
 				if item:
 					self.inventory.get_item(item)
+			elif self.pause_trigger == 'foodie':
+				self.foodie.show_dialog(self.foodie_index)
+			elif self.pause_trigger == 'reading':
+				self.reading.show_dialog(self.reading_index)
 		else:
 			self.sprs_visible.update()
 			self.sprs_visible.enemy_update(self.player)

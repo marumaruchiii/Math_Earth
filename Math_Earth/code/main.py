@@ -34,11 +34,23 @@ class Game:
 						# 把key的數字轉成index
 						index = event.key - 49 if event.key != 48 else 9
 						item = self.level.inventory.use_item(index)
-						# 如果用了書 就解鎖魔法
-						if item == 'book_heal':  self.level.player.active_magic(0)
-						if item == 'book_flame': self.level.player.active_magic(1)
-						if item == 'book_Ice1':  self.level.player.active_magic(2)
-						if item == 'book_Rock1': self.level.player.active_magic(3)
+						# 物品使用效果
+						if item:
+							# 如果用了書 就解鎖魔法
+							if item == 'book_heal':
+								self.level.reading_start(0)
+							if item == 'book_flame':
+								self.level.reading_start(1)
+							if item == 'book_Ice1':
+								self.level.reading_start(2)
+							if item == 'book_Rock1':
+								self.level.reading_start(3)
+							# 判斷是不是food開頭
+							if item[:4] == 'food':
+								index = int(item[4:])
+								self.level.foodie_start(index)
+					if event.key in [pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_SPACE]:
+						self.level.dialog_end()
 
 			self.screen.fill(WATER_COLOR)
 			self.level.run()

@@ -21,15 +21,77 @@ class ChatUi:
         text_rect = text_surf.get_rect(topleft=pos_new)
         layer.blit(text_surf,text_rect)
 
-    def draw_dialog(self, npc_icon, layer):
-        # 對話框背景
+    def draw_dialog(self, icon, layer):
+        # 畫出對話框背景
         bg_rect = Rect(0,540,1280,180)
         draw.rect(layer,UI_BG_COLOR,bg_rect)
         draw.rect(layer,UI_BORDER_COLOR,bg_rect.inflate(5,5),5)
-        # NPC頭像
-        npc_icon = pygame.transform.scale(npc_icon, (NPC_ICON_SIZE,NPC_ICON_SIZE))
-        icon_rect = npc_icon.get_rect(topleft=(20,560))
-        layer.blit(npc_icon,icon_rect)
+        # 畫出NPC頭像
+        if icon:
+            icon = pygame.transform.scale(icon, (NPC_ICON_SIZE,NPC_ICON_SIZE))
+            icon_rect = icon.get_rect(topleft=(20,560))
+            layer.blit(icon,icon_rect)
+
+class ChatFoodie(ChatUi):
+    def __init__(self) -> None:
+        super().__init__()
+        self.script_lock = False
+        self.script = [
+            [
+                "蛤蜊彈牙鮮嫩，充滿了海洋的風味，與酸菜相互輝映。",
+                "每一口湯都讓人感受到海的味道，讓味蕾仿佛在海浪的輕拍中徜徉。",
+                "吃完之後感覺全身充滿力量。",
+            ],
+            [
+                "蛋糕體蓬鬆柔軟，每一口都帶有淡淡的香草香氣。",
+                "蛋糕的層次分明，口感細緻，仿佛在嘴裡融化令人陶醉。",
+                "吃完之後感覺全身充滿力量。",
+            ],
+            [
+                "新鮮的刺身魚片、蔬菜和牛油果等擺放其中，",
+                "色彩繽紛，展現了多層次的美感。",
+                "卷物的內裡滿載豐富的食材，猶如一幅多彩的畫布。",
+                "吃完後感覺身心得到滿足、全身充滿了力量。",
+            ],
+            [
+                "金黃酥脆的烤豬肉，表面呈現出誘人的焦糖色澤，每一片都肥美多汁。",
+                "烤豬肉的香氣和玉子的淡雅相互交融。",
+                "吃下後感覺全身充滿了力量。",
+            ],
+            [
+                "香腸外皮烤得酥脆金黃，內裡肉質鮮嫩多汁。",
+                "搭配柔軟的麵包、番茄醬的甜酸、芥末的微辣，以及酸黃瓜的清脆。",
+                "吃下後感覺全身都充滿力量。",
+            ],
+        ]
+
+    def show_dialog(self, index):
+        layer = display.get_surface()
+        self.draw_dialog(None, layer)
+
+        scripts = self.script[index]
+        for index in range(len(scripts)):
+            self.draw_text(scripts[index], self.text_pos[index], layer)
+
+class ChatReading(ChatUi):
+    def __init__(self) -> None:
+        super().__init__()
+        self.script_lock = False
+        self.script = [
+            [   "學到了治癒的魔法",   ],
+            [   "學到了火焰的魔法",   ],
+            [   "學到了寒冰的魔法",   ],
+            [   "學到了落石的魔法",   ],
+        ]
+
+    def show_dialog(self, index):
+        layer = display.get_surface()
+        self.draw_dialog(None, layer)
+
+        scripts = self.script[index]
+        for index in range(len(scripts)):
+            self.draw_text(scripts[index], self.text_pos[index], layer)
+
 
 class ChatScriptOfPaul(ChatUi):
     def __init__(self) -> None:
